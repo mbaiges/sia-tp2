@@ -1,0 +1,42 @@
+genetic_operators:
+  crossover:
+    # all options: one_point, two_point, anular, uniform
+    opt: uniform
+  mutation:
+    # all options: gen, multi_limited, multi_uniform, full 
+    opt: multi_uniform
+
+selection: 
+  # [0.0-1.0]
+  A: 0.0
+  B: 0.0
+  # all options: elite, roulette, universal, boltzmann, det_tournaments, prob_tournaments, ranking
+  method1: roulette
+  method2: roulette
+  method3: roulette
+  method4: roulette
+
+implementation: 
+  # all options: fill_all, fill_parent
+  opt: fill_parent
+
+stop:
+  # all options: time, gens, acceptable, struct, content
+  opt: time
+  # in case of time, declared in seconds:
+  max_time: 30
+
+# path to tsv dile conataining all items info
+items_dataset: 
+  path: allitems
+  weapons_filename: armas.tsv
+  boots_filename: botas.tsv
+  helmets_filename: cascos.tsv
+  gloves_filename: guantes.tsv
+  breastplates_filename: pecheras.tsv
+
+# all options: warrior, archer, defender, infiltrate
+character_class: warrior
+
+# natural number greater than zero
+initial_population: 160
