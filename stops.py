@@ -12,5 +12,5 @@ class Time:
         try:
             return (datetime.now() - self.start_time).total_seconds() >= self.max_time
         except:
-            print("Ready hasn't been called")
+            print("Error: Ready hasn't been called")
             return True

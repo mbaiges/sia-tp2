@@ -9,7 +9,7 @@ def main():
     setup = get_setup(config)
     stop = setup.stop
 
-    initial_population = config.initial_population
+    initial_population = setup.initial_population
 
     # gen 0 - initial population
 
