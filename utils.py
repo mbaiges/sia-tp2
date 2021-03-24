@@ -6,131 +6,57 @@ from models import Config, Weapon, Boots, Helmet, Gloves, Breastplate, AllItems
 
 config_filename = 'config.yaml'
 
-def get_val_from_config(d, key):
+def get_val_from_config(d, key, required = False):
     v = d.get(key, None)
 
-    errored = False
-
-    if v is None:
+    if required and v is None:
         print(f'Error: Missing "{key}" key at config file')
-        errored = True
+        exit(1)
 
-    return v, errored
+    return v
 
 def read_config():
 
     with open(config_filename) as file:
         config = yaml.load(file, Loader=yaml.FullLoader)
 
-        err = False
+        genetic_operators = get_val_from_config(config, 'genetic_operators', True)
 
-        genetic_operators, errored = get_val_from_config(config, 'genetic_operators')
-        if errored:
-            err = errored
+        crossover = get_val_from_config(genetic_operators, 'crossover', True)
+        crossover_opt = get_val_from_config(crossover, 'opt', True)
+        crossover_params= get_val_from_config(crossover, 'params', False)
 
-        crossover, errored = get_val_from_config(genetic_operators, 'crossover')
-        if errored:
-            err = errored
+        mutation = get_val_from_config(genetic_operators, 'mutation', True)
+        mutation_opt = get_val_from_config(mutation, 'opt', True)
 
-        crossover_opt, errored = get_val_from_config(crossover, 'opt')
-        if errored:
-            err = errored
+        selection = get_val_from_config(config, 'selection', True)
+        K = get_val_from_config(selection, 'K', True)
+        A = get_val_from_config(selection, 'A', True)
+        B = get_val_from_config(selection, 'B', True)
+        selection_method1 = get_val_from_config(selection, 'method1', True)
+        selection_method2 = get_val_from_config(selection, 'method2', True)
+        selection_method3 = get_val_from_config(selection, 'method3', True)
+        selection_method4 = get_val_from_config(selection, 'method4', True)
 
-        mutation, errored = get_val_from_config(genetic_operators, 'mutation')
-        if errored:
-            err = errored
+        implementation = get_val_from_config(config, 'implementation', True)
+        implementation_opt = get_val_from_config(implementation, 'opt', True)
 
-        mutation_opt, errored = get_val_from_config(mutation, 'opt')
-        if errored:
-            err = errored
+        stop = get_val_from_config(config, 'stop', True)
+        stop_opt = get_val_from_config(stop, 'opt', True)
+        stop_params = get_val_from_config(stop, 'params', False)
 
-        selection, errored = get_val_from_config(config, 'selection')
-        if errored:
-            err = errored
+        items_dataset = get_val_from_config(config, 'items_dataset', True)
+        items_dataset_path = get_val_from_config(items_dataset, 'path', True)
+        items_dataset_weapons_filename = get_val_from_config(items_dataset, 'weapons_filename', True)
+        items_dataset_boots_filename = get_val_from_config(items_dataset, 'boots_filename', True)
+        items_dataset_helmets_filename = get_val_from_config(items_dataset, 'helmets_filename', True)
+        items_dataset_gloves_filename = get_val_from_config(items_dataset, 'gloves_filename', True)
+        items_dataset_breastplates_filename = get_val_from_config(items_dataset, 'breastplates_filename', True)
+        character_class = get_val_from_config(config, 'character_class', True)
 
-        A, errored = get_val_from_config(selection, 'A')
-        if errored:
-            err = errored
-
-        B, errored = get_val_from_config(selection, 'B')
-        if errored:
-            err = errored
-
-        selection_method1, errored = get_val_from_config(selection, 'method1')
-        if errored:
-            err = errored
-
-        selection_method2, errored = get_val_from_config(selection, 'method2')
-        if errored:
-            err = errored
-
-        selection_method3, errored = get_val_from_config(selection, 'method3')
-        if errored:
-            err = errored
-
-        selection_method4, errored = get_val_from_config(selection, 'method4')
-        if errored:
-            err = errored
-
-        implementation, errored = get_val_from_config(config, 'implementation')
-        if errored:
-            err = errored
-
-        implementation_opt, errored = get_val_from_config(implementation, 'opt')
-        if errored:
-            err = errored
-
-        stop, errored = get_val_from_config(config, 'stop')
-        if errored:
-            err = errored
-
-        stop_opt, errored = get_val_from_config(stop, 'opt')
-        if errored:
-            err = errored
-
-        # optional
-        stop_max_time, _ = get_val_from_config(stop, 'max_time')
-
-        items_dataset, errored = get_val_from_config(config, 'items_dataset')
-        if errored:
-            err = errored
-
-        items_dataset_path, errored = get_val_from_config(items_dataset, 'path')
-        if errored:
-            err = errored
-
-        items_dataset_weapons_filename, errored = get_val_from_config(items_dataset, 'weapons_filename')
-        if errored:
-            err = errored
-
-        items_dataset_boots_filename, errored = get_val_from_config(items_dataset, 'boots_filename')
-        if errored:
-            err = errored
-
-        items_dataset_helmets_filename, errored = get_val_from_config(items_dataset, 'helmets_filename')
-        if errored:
-            err = errored
-
-        items_dataset_gloves_filename, errored = get_val_from_config(items_dataset, 'gloves_filename')
-        if errored:
-            err = errored
-
-        items_dataset_breastplates_filename, errored = get_val_from_config(items_dataset, 'breastplates_filename')
-        if errored:
-            err = errored
-
-        character_class, errored = get_val_from_config(config, 'character_class')
-        if errored:
-            err = errored
-
-        initial_population, errored = get_val_from_config(config, 'initial_population')
-        if errored:
-            err = errored
-
-        if err:
-            exit(1)
+        initial_population = get_val_from_config(config, 'initial_population', True)
             
-        return Config(crossover_opt, mutation_opt, A, B, selection_method1, selection_method2, selection_method3, selection_method4, implementation_opt, stop_opt, items_dataset_path, items_dataset_weapons_filename, items_dataset_boots_filename, items_dataset_helmets_filename, items_dataset_gloves_filename, items_dataset_breastplates_filename, character_class, initial_population, stop_max_time)
+        return Config(crossover_opt, crossover_params, mutation_opt, K, A, B, selection_method1, selection_method2, selection_method3, selection_method4, implementation_opt, stop_opt, stop_params, items_dataset_path, items_dataset_weapons_filename, items_dataset_boots_filename, items_dataset_helmets_filename, items_dataset_gloves_filename, items_dataset_breastplates_filename, character_class, initial_population)
 
 def read_items(path, filename, item_contructor):
     full_path = os.path.join(path, filename)

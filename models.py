@@ -11,9 +11,11 @@ class ItemsFilenames:
 
 class Config:
 
-    def __init__(self, crossover, mutation, A, B, method1, method2, method3, method4, implementation, stop, items_dataset_path, weapons_filename, boots_filename, helmets_filename, gloves_filename, breastplates_filename, character_class, initial_population, max_time = None):
+    def __init__(self, crossover, crossover_params, mutation, K, A, B, method1, method2, method3, method4, implementation, stop, stop_params, items_dataset_path, weapons_filename, boots_filename, helmets_filename, gloves_filename, breastplates_filename, character_class, initial_population):
         self.crossover = crossover
+        self.crossover_params = crossover_params
         self.mutation = mutation
+        self.K = K
         self.A = A
         self.B = B
         self.method1 = method1
@@ -22,19 +24,19 @@ class Config:
         self.method4 = method4
         self.implementation = implementation
         self.stop = stop
+        self.stop_params = stop_params
         self.items_dataset_path = items_dataset_path
         self.items_dataset_filenames = ItemsFilenames(weapons_filename, boots_filename, helmets_filename, gloves_filename, breastplates_filename)
         self.character_class = character_class
         self.initial_population = initial_population
 
-        # optionals
-        self.max_time = max_time
-
     def __str__(self):
         s = 'Config:\n'
         s += f'\tcrossover: {self.crossover}\n'
+        s += f'\t\tcrossover_params: {self.crossover_params}\n'
         s += f'\tmutation: {self.mutation}\n'
         s += f'\tselection:\n'
+        s += f'\t\tK: {self.K}\n'
         s += f'\t\tA: {self.A}\n'
         s += f'\t\tB: {self.B}\n'
         s += f'\t\tmethod1: {self.method1}\n'
@@ -43,8 +45,7 @@ class Config:
         s += f'\t\tmethod4: {self.method4}\n'
         s += f'\timplementation: {self.implementation}\n'
         s += f'\tstop: {self.stop}\n'
-        if self.stop == 'time':
-            s += f'\t\tmax_time: {self.max_time}\n'
+        s += f'\t\tstop_params: {self.stop_params}\n'
         s += f'\titems_dataset:\n'
         s += f'\t\tpath: {self.items_dataset_path}\n'
         s += f'\t\tweapons: {self.items_dataset_filenames.weapons}\n'
@@ -115,7 +116,10 @@ class AllItems:
 
 class Character:
 
-    def __init__(self, height, items):
+    def __init__(self, gens): # items es un ItemsSet
+        height = gens[0]
+        items = ItemsSet(gens[1], gens[2], gens[3], gens[4], gens[5])
+
         self.items = items
 
         items_strength = 0
@@ -139,6 +143,8 @@ class Character:
 
         # height must be [1.3m - 2.0m]
         self.height = height
+
+        self.gens = [self.height, self.items.weapon, self.items.boots, self.items.helmet, self.items.gloves, self.items.breastplate]
 
         self.ATM = 0.7 - (3*self.height - 5)**4 + (3*self.height - 5)**2 + self.height/4.0
         self.DEM = 1.9 + (2.5*self.height - 4.16)**4 - (2.5*self.height - 4.16)**2 - 3*self.height/10.0
@@ -164,8 +170,8 @@ class Character:
 
 class Warrior(Character):
 
-    def __init__(self, height, items):
-        super().__init__(height, items)
+    def __init__(self, gens):
+        super().__init__(gens)
         self.fitness = 0.6 * self.attack + 0.6 * self.defense
 
     def __str__(self):
@@ -176,8 +182,8 @@ class Warrior(Character):
 
 class Archer(Character):
 
-    def __init__(self, height, items):
-        super().__init__(height, items)
+    def __init__(self, gens):
+        super().__init__(gens)
         self.fitness = 0.9 * self.attack + 0.1 * self.defense
 
     def __str__(self):
@@ -188,8 +194,8 @@ class Archer(Character):
 
 class Defender(Character):
 
-    def __init__(self, height, items):
-        super().__init__(height, items)
+    def __init__(self, gens):
+        super().__init__(gens)
         self.fitness = 0.3 * self.attack + 0.8 * self.defense
 
     def __str__(self):
@@ -200,8 +206,8 @@ class Defender(Character):
 
 class Infiltrate(Character):
 
-    def __init__(self, height, items):
-        super().__init__(height, items)
+    def __init__(self, gens):
+        super().__init__(gens)
         self.fitness = 0.8 * self.attack + 0.3 * self.defense
 
     def __str__(self):
@@ -212,10 +218,11 @@ class Infiltrate(Character):
 
 class Setup:
 
-    def __init__(self, all_items, crossover, mutation, A, B, method1, method2, method3, method4, implementation, stop, character_class_constructor, initial_population, max_time = None):
+    def __init__(self, all_items, crossover, mutation, K, A, B, method1, method2, method3, method4, implementation, stop, character_class_constructor, initial_population):
         self.all_items = all_items
         self.crossover = crossover
         self.mutation = mutation
+        self.K = K
         self.A = A
         self.B = B
         self.method1 = method1
@@ -227,5 +234,21 @@ class Setup:
         self.character_class_constructor = character_class_constructor
         self.initial_population = initial_population
 
-        # optionals
-        self.max_time = max_time
+class Generation:
+
+    def __init__(self, individuals, number):
+        self.individuals = individuals
+        self.number = number
+
+    def min_fitness(self):
+        res = math.inf
+        for ind in self.individuals:
+            if ind.fitness < res:
+                res = ind.fitness
+        return res
+
+    def mean_fitness(self):
+        res = 0
+        for ind in self.individuals:
+            res += ind.fitness
+        return res / len(self.individuals) 
