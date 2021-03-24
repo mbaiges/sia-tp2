@@ -31,21 +31,39 @@ A continuación, se muestra un ejemplo de configuración:
 ```yaml
 genetic_operators:
   crossover:
-    # all options: one_point, two_point, anular, uniform
-    opt: uniform
+    # all options: one_point, two_points, anular, uniform
+    opt: one_point
+    params:
+      # in case of one_point
+      p: 4 
+
+      # in case of two_points
+      p1: 2
+      p2: 4
+      
+      # in case of anular (Cruce anular)
+      ap: 3
+      l: 3
+
+      # in case of uniform (Cruce uniforme)
+      # up between [0.0 - 1.0]
+      up: 0.5
+
   mutation:
     # all options: gen, multi_limited, multi_uniform, full 
     opt: multi_uniform
 
-selection: 
+selection:
+  # number of individuals selected each generation
+  K: 140
   # [0.0-1.0]
   A: 0.3
   B: 0.7
   # all options: elite, roulette, universal, boltzmann, det_tournaments, prob_tournaments, ranking
   method1: elite
-  method2: roulette
-  method3: universal
-  method4: ranking
+  method2: ranking
+  method3: roulette
+  method4: universal
 
 implementation: 
   # all options: fill_all, fill_parent
@@ -54,8 +72,15 @@ implementation:
 stop:
   # all options: time, gens, acceptable, struct, content
   opt: time
-  # in case of time, declared in seconds:
-  max_time: 30
+  params:
+    # in case of time, declared in seconds
+    max_time: 30
+
+    # in case of gens
+    max_generation: 30
+
+    # in case of acceptable
+    mean_acceptable_fitness: 100
 
 # path to tsv dile conataining all items info
 items_dataset: 
