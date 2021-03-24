@@ -51,7 +51,6 @@ def get_setup(config):
 
     # Character class
 
-    print(f'Character class: {config.character_class}')
     character_class_constructor = characters_classes.get(config.character_class, None)
 
     if character_class_constructor is None:
@@ -158,5 +157,7 @@ def get_setup(config):
 
     all_items = read_all_items(config.items_dataset_path, config.items_dataset_filenames)
     print("Items loaded")
+
+    print(len(all_items.weapons))
 
     return Setup(all_items, crossover, mutation, A, B, method1, method2, method3, method4, implementation, stop, character_class_constructor, config.initial_population)

@@ -143,8 +143,15 @@ def read_items(path, filename, item_contructor):
 
         i = 0
         for row in read_tsv:
-            if i != 0:
-                items.append(item_contructor(i-1, float(row[0]), float(row[1]), float(row[2]), float(row[3]), float(row[4]), float(row[5]))) # TODO: Check whether to use float or FIXED_POINT!
+            if i == 0:
+                first_row = row
+                for j in range(0, len(first_row)):
+                    first_row[j] = first_row[j].lower()
+            else:
+                it = {}
+                for j in range(0, len(row)):
+                    it[first_row[j]] = float(row[j])
+                items.append(item_contructor(i-1, it['id'], it['fu'], it['ag'], it['ex'], it['re'], it['vi'])) # TODO: Check whether to use float or FIXED_POINT!
             i += 1
     except:
         print(f'Error: An error ocurred reading items from file "{full_path}"')
