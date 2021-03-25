@@ -313,6 +313,20 @@ def get_setup(config):
                 print('Error: mean_acceptable_fitness must be greater than 0')
                 exit(1)
             stop = stop(mean_acceptable_fitness)
+        
+        elif config.stop == 'content':
+            max_generations_counter = stop_params['max_generations_counter']
+            if max_generations_counter is None:
+                print("Error: Missing max_generations_counter param at stop")
+                exit(1)
+            elif not (type(max_generations_counter) == int ) :
+                print('Error: max_generations_counter must be an integer')
+                exit(1)
+            max_generations_counter = int(max_generations_counter)
+            if max_generations_counter < 0:
+                print('Error: max_generations_counter must be greater than 0')
+                exit(1)
+            stop = stop(max_generations_counter)
             
 
     else:
