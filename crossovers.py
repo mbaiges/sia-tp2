@@ -1,12 +1,35 @@
 import random
 
+
+# p1 p2 p3 p4 p5 p6 p7
+# p1 p2 p3 p4 p5 p6
+
+def pair_parents(parents):
+    i = 0
+    pparents = []
+
+    if(len(parents) == 1 or len(parents) == 0):
+        print('Error: pair_parents must have more than 1 parent')
+        exit(1)
+
+    while i < len(parents):
+        if i == len(parents) - 1 : 
+            pparents.append([parents[i], parents[i+1]])
+        else:
+            pparents.append([parents[i], parents[i+1]])
+        i += 2
+
+    return pparents
+
+
 class OnePoint:
 
     def __init__(self, p):
         self.p = p
 
-    def cross(parents, setup):
-        
+    def cross(parents, char_gen):
+
+        pair_parents(parents)
         # Los parent vienen así [[p1, p2], [p3, p4], ......]
         
         children = []
@@ -23,8 +46,8 @@ class OnePoint:
                 cgen1.append(ppair[1].gens[i])
                 cgen2.append(ppair[0].gens[i])
                 i += 1
-            children.append(setup.character_class(cgen1))
-            children.append(setup.character_class(cgen2))
+            children.append(char_gen(cgen1))
+            children.append(char_gen(cgen2))
         
         return children                
 
@@ -36,7 +59,9 @@ class TwoPoints:
         self.p1 = p1
         self.p2 = p2
 
-    def cross(parents, setup):
+    def cross(parents, char_gen):
+
+        pair_parents(parents)
 
         children = []
 
@@ -56,8 +81,8 @@ class TwoPoints:
                 cgen1.append(ppair[0].gens[i])
                 cgen2.append(ppair[1].gens[i])
                 i += 1
-            children.append(setup.character_class(cgen1))
-            children.append(setup.character_class(cgen2))
+            children.append(char_gen(cgen1))
+            children.append(char_gen(cgen2))
         
         return children        
 
@@ -67,8 +92,9 @@ class Anular:
         self.p = p
         self.l = l
 
-    def cross(parents, setup):
+    def cross(parents, char_gen):
 
+        pair_parents(parents)
         children = []
 
         for ppair in parents:
@@ -85,8 +111,8 @@ class Anular:
                     cgen2.append(ppair[1].gens[i])
                 i += 1
 
-            children.append(setup.character_class(cgen1))
-            children.append(setup.character_class(cgen2))
+            children.append(char_gen(cgen1))
+            children.append(char_gen(cgen2))
         
         return children        
 
@@ -97,8 +123,9 @@ class Uniform:
     def __init__(self, p):
         self.p = p
 
-    def cross(parents, setup):
+    def cross(parents, char_gen):
         
+        pair_parents(parents)
         # Los parent vienen así [[p1, p2], [p3, p4], ......]
         
         children = []
@@ -116,8 +143,9 @@ class Uniform:
                     cgen1.append(ppair[1].gens[i])
                     cgen2.append(ppair[0].gens[i])
                 i += 1
-            children.append(setup.character_class(cgen1))
-            children.append(setup.character_class(cgen2))
+            children.append(char_gen(cgen1))
+            children.append(char_gen(cgen2))
         
         return children                
+
 

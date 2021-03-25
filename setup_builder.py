@@ -1,7 +1,7 @@
 from models import Warrior, Archer, Defender, Infiltrate, Setup
 from selections import Elite, Roulette
 from crossovers import OnePoint, TwoPoints, Anular, Uniform
-from stops import Time, Generations
+from stops import Time, Generations, Acceptable
 
 from utils import read_all_items
 
@@ -44,7 +44,7 @@ implementations = {
 stops = {
     'time': Time,
     'gens': Generations,
-    'acceptable': Time,
+    'acceptable': Acceptable,
     'struct': Time,
     'content': Time
 }

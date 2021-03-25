@@ -22,18 +22,18 @@ def main():
 
     stop.ready()
 
-    # while not stop.reached_end(gen):
-    #     print("Iterating")
+    while not stop.reached_end(gen):
+        print("Iterating")
 
-    #     # select parents
-    #     # parents1 = setup.method1.select(gen, setup.gen)
+        # select parents
+        # parents1 = setup.method1.select(gen, setup.gen)
 
-    #     # crossover
+        # crossover
         
 
-    #     # mutation
+        # mutation
 
-    #     # implementation (fill all / fill parent)
+        # implementation (fill all / fill parent)
 
     print("End reached")
 

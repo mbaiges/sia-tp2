@@ -22,7 +22,7 @@ pip install -r requirements.txt
 
 ### Configuración
 
-Antes de ejecutar el programa, se estable un archivo de configuración bajo el nombre de `config.yaml`.
+Antes de ejecutar el programa, se establece un archivo de configuración bajo el nombre de `config.yaml`.
 
 En este archivo se configuran todos los parametros de ejecución del programa, así como la ubicación de los datos de los items.
 
@@ -82,7 +82,7 @@ stop:
     # in case of acceptable
     mean_acceptable_fitness: 100
 
-# path to tsv dile conataining all items info
+# path to tsv file containing all items info
 items_dataset: 
   path: allitems
   weapons_filename: armas.tsv

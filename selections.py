@@ -1,3 +1,5 @@
+import random
+
 class Elite:
 
     def select(self, gen, K):
@@ -26,4 +28,23 @@ class Elite:
 class Roulette:
 
     def select(self, gen, K):
-        return 0
+        
+        total_fitness = 0
+
+        for ind in gen.individuals:
+            total_fitness += ind.fitness
+
+        mapped_individuals = []
+        acum = 0
+
+        for ind in gen.individuals:
+            rel = ind.fitness / total_fitness
+            acum += rel
+            mapped_individuals.append((ind, rel, acum))
+
+        selected = []
+        selected_n = 0
+
+        while selected_n < K:
+            r = random.uniform(min_height, max_height) # TODO: Careful with 1
+
