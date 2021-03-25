@@ -2,7 +2,7 @@ from models import Warrior, Archer, Defender, Infiltrate, Setup
 from selections import Elite, Roulette, Universal, Boltzmann
 from crossovers import OnePoint, TwoPoints, Anular, Uniform
 from stops import Time, Generations, Acceptable
-
+from mutations import Gen, MultigenLimitada, MultigenUniforme, Completa
 from utils import read_all_items
 
 characters_classes = {
@@ -20,10 +20,10 @@ crossovers = {
 }
 
 mutations = {
-    'gen': 'algo',
-    'multi_limited': 'algo',
-    'multi_uniform': 'algo',
-    'full': 'algo'
+    'gen': Gen,
+    'multi_limited': MultigenLimitada,
+    'multi_uniform': MultigenUniforme,
+    'full': Completa
 }
 
 selections = {
@@ -223,7 +223,7 @@ def get_setup(config):
 
     mutation = mutations.get(config.mutation, None)
     if mutation is None:
-        print(f'Error: Crossover method "{config.mutation}" does not exist')
+        print(f'Error: Mutation method "{config.mutation}" does not exist')
         exit(1)
 
     # they all needs params
@@ -234,21 +234,57 @@ def get_setup(config):
         exit(1)
 
     if config.mutation == 'gen':
-        p = mutation_params['p']
-        if p is None:
-            print("Error: Missing p param at mutation")
+        pg = mutation_params['pg']
+        if pg is None:
+            print("Error: Missing pg param at mutation")
             exit(1)
-        elif not (type(p) == int or type(p) == float):
-            print('Error: p must be a number')
+        elif not (type(pg) == int or type(pg) == float):
+            print('Error: pg must be a number')
             exit(1)
-        p = float(p)
-        if p <= 0:
-            print('Error: p must be greater than 0')
+        pg = float(pg)
+        if pg < 0 or pg > 1:
+            print('Error: pg must be between 0 and 1')
             exit(1)
-
-        mutation = mutation(p)
-    else:
-        mutation = mutation()
+        mutation = mutation(pg)
+    elif config.mutation == 'multi_limited'
+        pml = mutation_params['pml']
+        if pml is None:
+            print("Error: Missing pml param at mutation")
+            exit(1)
+        elif not (type(pml) == int or type(pml) == float):
+            print('Error: pg must be a number')
+            exit(1)
+        pml = float(pml)
+        if pml < 0 or pml > 1:
+            print('Error: pml must be between 0 and 1')
+            exit(1)
+        mutation = mutation(pml)
+    elif config.mutation == 'multi_uniform'
+        pmu = mutation_params['pmu']
+        if pmu is None:
+            print("Error: Missing pmu param at mutation")
+            exit(1)
+        elif not (type(pmu) == int or type(pmu) == float):
+            print('Error: pg must be a number')
+            exit(1)
+        pmu = float(pmu)
+        if pmu < 0 or pmu > 1:
+            print('Error: pg must be between 0 and 1')
+            exit(1)
+        mutation = mutation(pmu)
+    elif config.mutation == 'full'
+        pf = mutation_params['pf']
+        if pf is None:
+            print("Error: Missing pf param at mutation")
+            exit(1)
+        elif not (type(pf) == int or type(pf) == float):
+            print('Error: pf must be a number')
+            exit(1)
+        pf = float(pf)
+        if pf < 0 or pf > 1:
+            print('Error: pf must be between 0 and 1')
+            exit(1)
+        mutation = mutation(pf)
 
     # Implementation
 
