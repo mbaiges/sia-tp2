@@ -21,7 +21,7 @@ class Elite:
             while n > 0 and selected_n < K:
                 selected.append(sorted_individuals[i])
                 selected_n += 1
-                n -= 0
+                n -= 1
             i += 1
 
         return selected
@@ -138,7 +138,7 @@ class Boltzmann:
 
         return selected
 
-    def _exp_fi_t(ind, temp):
+    def _exp_fi_t(self, ind, temp):
         return math.exp(ind.fitness/temp)
 
     def _temperature(self, n):

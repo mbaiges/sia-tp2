@@ -23,7 +23,6 @@ def get_random_gloves(all_items):
 def get_random_breastlate(all_items):
     return get_rand_item(all_items.breastplates)
 
-
 def mutate_gen(gene_to_mutate, all_items):
 
     switcher = {
@@ -35,9 +34,13 @@ def mutate_gen(gene_to_mutate, all_items):
         5: get_random_breastlate
     }
 
-    func = switcher.get(gene_to_mutate, lambda: "invalid gene index")
+    func = switcher.get(gene_to_mutate, None)
 
-    return func(all_items)
+    if func is None:
+        print("Error: Mutate switch off bounds")
+        exit(1)
+    else:
+        return func(all_items)
 
 
 class Gen:
@@ -47,10 +50,11 @@ class Gen:
 
     def mutate(self, genes, setup):
         
-        mutation_chance = random.uniform(0, 1)
-        if mutation_chance < self.p:
-            gene_to_mutate = random.randint(0,len(genes)-1)
-            genes[gene_to_mutate] = mutate_gen(gene_to_mutate, setup.all_items)
+        for gene in genes:
+            mutation_chance = random.uniform(0, 1)
+            if mutation_chance < self.p:
+                gene_to_mutate = random.randint(0,len(gene)-1)
+                gene[gene_to_mutate] = mutate_gen(gene_to_mutate, setup.all_items)
 
         return genes
 
@@ -61,13 +65,14 @@ class MultigenLimitada:
 
     def mutate(self, genes, setup):
 
-        mutation_chance = random.uniform(0, 1)
-        if mutation_chance < self.p:
-            genes_ammount = len(genes)
-            ammount_of_genes_to_mutate = random.randint(1,genes_ammount)
-            rand_indexes = np.random.randint(0,genes_ammount,ammount_of_genes_to_mutate)
-            for i in rand_indexes:
-                genes[i] = mutate_gen(i, setup.all_items)
+        for gene in genes:
+            mutation_chance = random.uniform(0, 1)
+            if mutation_chance < self.p:
+                genes_ammount = len(gene)
+                ammount_of_genes_to_mutate = random.randint(1,genes_ammount)
+                rand_indexes = np.random.randint(0,genes_ammount-1,ammount_of_genes_to_mutate)
+                for i in rand_indexes:
+                    gene[i] = mutate_gen(i, setup.all_items)
 
         return genes
 
@@ -78,10 +83,11 @@ class MultigenUniforme:
 
     def mutate(self, genes, setup):
 
-        for i in range(0,len(genes)):
-            mutation_chance = random.uniform(0, 1)
-            if mutation_chance < self.p:
-                genes[i] = mutate_gen(i, setup.all_items)
+        for gene in genes:
+            for i in range(0,len(gene)-1):
+                mutation_chance = random.uniform(0, 1)
+                if mutation_chance < self.p:
+                    gene[i] = mutate_gen(i, setup.all_items)
 
         return genes
 
@@ -91,11 +97,11 @@ class Completa:
         self.p = p
     
     def mutate(self, genes, setup):
-
-        mutation_chance = random.uniform(0, 1)
-        if mutation_chance < self.p:
-            for i in range(0,len(genes)):
-                genes[i] = mutate_gen(i, setup.all_items)
+        for gene in genes:
+            mutation_chance = random.uniform(0, 1)
+            if mutation_chance < self.p:
+                for i in range(0,len(gene)-1):
+                    gene[i] = mutate_gen(i, setup.all_items)
 
         return genes
 
