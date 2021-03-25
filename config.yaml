@@ -21,7 +21,7 @@ genetic_operators:
   mutation:
     # all options: gen, multi_limited, multi_uniform, full 
     opt: multi_uniform
-    params:
+        params:
       # in case of gen (p is the probability to mutate only one gene)\
       # p between [0.0 - 1.0]
       pg: 0.5
@@ -37,6 +37,7 @@ genetic_operators:
       # in case of full (p is the probability of mutating all gens or none)
       # p between [0.0 - 1.0]
       pf: 0.5
+
 
 selection:
   # number of individuals selected each generation
@@ -61,7 +62,16 @@ selection:
 
 implementation: 
   # all options: fill_all, fill_parent
-  opt: fill_parent
+  opt: fill_all
+  params:
+    
+    # in case of fill_all
+      fill_all_n: 50
+
+    # in case of fill_parent
+      fill_parent_n: 50
+
+
 
 stop:
   # all options: time, gens, acceptable, struct, content

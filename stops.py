@@ -28,21 +28,6 @@ class Generations:
         return gen.number >= max_generations
 
 
-# class Struct: #TODO
-#     current_generation = None
-#     def __init__(self, relevant_percentage_of_change):
-#         self.relevant_percentage_of_change = relevant_percentage_of_change
-    
-#     def ready(self):
-#         return
-
-#     def reached_end(self, gen):
-#         if not current_generation:
-#             current_generation = gen
-#             return False
-
-#         if 
-#         return gen.mean_fitness() >= mean_acceptable_fitness
 
 
 class Acceptable:
@@ -56,6 +41,22 @@ class Acceptable:
     def reached_end(self, gen):
         return gen.mean_fitness() >= mean_acceptable_fitness
 
+
+# class Struct: #TODO
+#     current_generation = None
+#     def __init__(self, relevant_percentage_of_change):
+#         self.relevant_percentage_of_change = relevant_percentage_of_change
+    
+#     def ready(self):
+#         return
+
+#     def reached_end(self, gen):
+#         if  current_generation is None:
+#             current_generation = gen
+#             return False
+
+#         if 
+#         return gen.mean_fitness() >= mean_acceptable_fitness
 
 
 class Content:

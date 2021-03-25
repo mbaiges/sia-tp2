@@ -3,6 +3,8 @@ from selections import Elite, Roulette, Universal, Boltzmann
 from crossovers import OnePoint, TwoPoints, Anular, Uniform
 from mutations import Gen, MultigenLimitada, MultigenUniforme, Completa
 from stops import Time, Generations, Acceptable, Content
+from implementations import FillAll
+
 from utils import read_all_items
 
 characters_classes = {
@@ -37,7 +39,7 @@ selections = {
 }
 
 implementations = {
-    'fill_all': 'algo',
+    'fill_all': FillAll,
     'fill_parent': 'algo'
 }
 
@@ -48,6 +50,7 @@ stops = {
     'struct': Time,
     'content': Content
 }
+
 
 def get_selection(name, params):
     method = selections.get(name, None)
@@ -151,22 +154,24 @@ def get_setup(config):
     ## Method 1
 
     method1 = get_selection(config.method1, config.method1_params)
-
-    ## Method 2
+    
+        ## Method 2
 
     method2 = get_selection(config.method2, config.method2_params)
 
     ## Method 3
 
-    method3 = get_selection(config.method3, config.method3_params)
+        method3 = get_selection(config.method3, config.method3_params)
+
 
     ## Method 4
 
-    method4 = get_selection(config.method4, config.method4_params)
+        method4 = get_selection(config.method4, config.method4_params)
+
 
     # Genetic operators
 
-    ## Crossover
+    ## Crossover --------------------------------------------------------------------------------------------------------------------------
 
     crossover = crossovers.get(config.crossover, None)
     if crossover is None:
@@ -253,9 +258,9 @@ def get_setup(config):
         
         crossover = crossover(up)
 
-    ## Mutation
+    ## Mutation ---------------------------------------------------------------------------------
 
-    mutation = mutations.get(config.mutation, None)
+     mutation = mutations.get(config.mutation, None)
     if mutation is None:
         print(f'Error: Mutation method "{config.mutation}" does not exist')
         exit(1)
@@ -320,14 +325,52 @@ def get_setup(config):
             exit(1)
         mutation = mutation(pf)
 
-    # Implementation
+    # Implementation-----------------------------------------------------------------------------
 
     implementation = implementations.get(config.implementation, None)
     if implementation is None:
         print(f'Error: Implementation method "{config.implementation}" does not exist')
         exit(1)
 
-    # Stop
+    # if needs params
+    
+    implementation_params = config.implementation_params
+    
+    if implementation_params is None:
+        print("Error: Implementations params missing")
+        exit(1)
+
+    if config.implementation == 'fill_all':
+        fill_all_n = implementation_params['fill_all_n']
+        if fill_all_n is None:
+            print("Error: Missing fill_all_n param at Implementation")
+            exit(1)
+        elif not (type(fill_all_n) == int):
+            print('Error: fill_all_n must be a number')
+            exit(1)
+        fill_all_n = int(fill_all_n)
+        if fill_all_n <= 0:
+            print('Error: fill_all_n must be greater than 0')
+            exit(1)
+
+        implementation = implementation(fill_all_n)
+
+    elif config.implementation == 'fill_parent':
+        fill_parent_n = implementation_params['fill_parent_n']
+        if fill_parent_n is None:
+            print("Error: Missing fill_parent_n param at Implementation")
+            exit(1)
+        elif not (type(fill_parent_n) == int):
+            print('Error: fill_parent_n must be a number')
+            exit(1)
+        fill_parent_n = int(fill_parent_n)
+        if fill_parent_n <= 0:
+            print('Error: fill_parent_n must be greater than 0')
+            exit(1)
+
+        implementation = implementation(fill_parent_n)
+    
+    # Stop -------------------------------------------------------------
 
     stop = stops.get(config.stop, None)
     if stop is None:
@@ -335,86 +378,84 @@ def get_setup(config):
         exit(1)
 
     # if needs params
-    if config.stop == 'time' or config.stop == 'gens':
-        stop_params = config.stop_params
+ 
+    stop_params = config.stop_params
 
-        if stop_params is None:
-            print("Error: Stop params missing")
+    if stop_params is None:
+        print("Error: Stop params missing")
+        exit(1)
+
+    if config.stop == 'time':
+        max_time = stop_params['max_time']
+        if max_time is None:
+            print("Error: Missing max_time param at stop")
+            exit(1)
+        elif not (type(max_time) == int or type(max_time) == float):
+            print('Error: max_time must be a number')
+            exit(1)
+        max_time = float(max_time)
+        if max_time <= 0:
+            print('Error: max_time must be greater than 0')
             exit(1)
 
-        if config.stop == 'time':
-            max_time = stop_params['max_time']
-            if max_time is None:
-                print("Error: Missing max_time param at stop")
-                exit(1)
-            elif not (type(max_time) == int or type(max_time) == float):
-                print('Error: max_time must be a number')
-                exit(1)
-            max_time = float(max_time)
-            if max_time <= 0:
-                print('Error: max_time must be greater than 0')
-                exit(1)
+        stop = stop(max_time)
+    elif config.stop == 'gens':
+        max_generations = stop_params['max_generation']
+        if max_generations is None:
+            print("Error: Missing max_generations param at stop")
+            exit(1)
+        elif not (type(max_generations) == int ) :
+            print('Error: max_generations must be an integer')
+            exit(1)
+        max_generations = int(max_generations)
+        if max_generations < 0:
+            print('Error: max_generations must be greater than 0')
+            exit(1)
+        stop = stop(max_generations)
 
-            stop = stop(max_time)
-        elif config.stop == 'gens':
-            max_generations = stop_params['max_generation']
-            if max_generations is None:
-                print("Error: Missing max_generations param at stop")
-                exit(1)
-            elif not (type(max_generations) == int ) :
-                print('Error: max_generations must be an integer')
-                exit(1)
-            max_generations = int(max_generations)
-            if max_generations < 0:
-                print('Error: max_generations must be greater than 0')
-                exit(1)
-            stop = stop(max_generations)
-
-        elif config.stop == 'acceptable':
-            mean_acceptable_fitness = stop_params['mean_acceptable_fitness']
-            if mean_acceptable_fitness is None:
-                print("Error: Missing mean_acceptable_fitness param at stop")
-                exit(1)
-            elif not (type(mean_acceptable_fitness) == int ) :
-                print('Error: mean_acceptable_fitness must be an integer')
-                exit(1)
-            mean_acceptable_fitness = int(mean_acceptable_fitness)
-            if mean_acceptable_fitness < 0:
-                print('Error: mean_acceptable_fitness must be greater than 0')
-                exit(1)
-            stop = stop(mean_acceptable_fitness)
-        
-        # elif config.stop == 'struct':
-        #     relevant_percentage_of_change = stop_params['relevant_percentage_of_change']
-        #     if relevant_percentage_of_change is None:
-        #         print("Error: Missing relevant_percentage_of_change param at stop")
-        #         exit(1)
-        #     elif not (type(relevant_percentage_of_change) == int or type(relevant_percentage_of_change) == float):
-        #         print('Error: relevant_percentage_of_change must be a number')
-        #         exit(1)
-        #     relevant_percentage_of_change = float(relevant_percentage_of_change)
-        #     if relevant_percentage_of_change < 0 or relevant_percentage_of_change > 1:
-        #         print('Error: relevant_percentage_of_change must be between [0.0 - 1.0]')
-        #         exit(1)
-        #     stop = stop(relevant_percentage_of_change)
-        
-        elif config.stop == 'content':
-            max_generations_counter = stop_params['max_generations_counter']
-            if max_generations_counter is None:
-                print("Error: Missing max_generations_counter param at stop")
-                exit(1)
-            elif not (type(max_generations_counter) == int ) :
-                print('Error: max_generations_counter must be an integer')
-                exit(1)
-            max_generations_counter = int(max_generations_counter)
-            if max_generations_counter < 0:
-                print('Error: max_generations_counter must be greater than 0')
-                exit(1)
-            stop = stop(max_generations_counter)
+    elif config.stop == 'acceptable':
+        mean_acceptable_fitness = stop_params['mean_acceptable_fitness']
+        if mean_acceptable_fitness is None:
+            print("Error: Missing mean_acceptable_fitness param at stop")
+            exit(1)
+        elif not (type(mean_acceptable_fitness) == int ) :
+            print('Error: mean_acceptable_fitness must be an integer')
+            exit(1)
+        mean_acceptable_fitness = int(mean_acceptable_fitness)
+        if mean_acceptable_fitness < 0:
+            print('Error: mean_acceptable_fitness must be greater than 0')
+            exit(1)
+        stop = stop(mean_acceptable_fitness)
+    
+    # elif config.stop == 'struct':
+    #     relevant_percentage_of_change = stop_params['relevant_percentage_of_change']
+    #     if relevant_percentage_of_change is None:
+    #         print("Error: Missing relevant_percentage_of_change param at stop")
+    #         exit(1)
+    #     elif not (type(relevant_percentage_of_change) == int or type(relevant_percentage_of_change) == float):
+    #         print('Error: relevant_percentage_of_change must be a number')
+    #         exit(1)
+    #     relevant_percentage_of_change = float(relevant_percentage_of_change)
+    #     if relevant_percentage_of_change < 0 or relevant_percentage_of_change > 1:
+    #         print('Error: relevant_percentage_of_change must be between [0.0 - 1.0]')
+    #         exit(1)
+    #     stop = stop(relevant_percentage_of_change)
+    
+    elif config.stop == 'content':
+        max_generations_counter = stop_params['max_generations_counter']
+        if max_generations_counter is None:
+            print("Error: Missing max_generations_counter param at stop")
+            exit(1)
+        elif not (type(max_generations_counter) == int ) :
+            print('Error: max_generations_counter must be an integer')
+            exit(1)
+        max_generations_counter = int(max_generations_counter)
+        if max_generations_counter < 0:
+            print('Error: max_generations_counter must be greater than 0')
+            exit(1)
+        stop = stop(max_generations_counter)
             
 
-    else:
-        stop = stop()
 
     # Initial population
 
