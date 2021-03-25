@@ -103,10 +103,23 @@ class Boltzmann:
 
         n = gen.number
 
-        mapped_individuals = []
+        avg_exp_fi_t = 0
 
         for ind in gen.individuals:
-            rel = ind.fitness / total_fitness
+            avg_exp_fi_t += self._exp_fi_t(ind, self._temperature(gen.number))
+
+        avg_exp_fi_t /= len(gen.individuals)
+
+        total_pseudo_fitness = 0
+
+        for ind in gen.individuals:
+            total_pseudo_fitness += (self._exp_fi_t(ind, self._temperature(gen.n))/avg_exp_fi_t)
+
+        mapped_individuals = []
+        acum = 0
+
+        for ind in gen.individuals:
+            rel = (self._exp_fi_t(ind, self._temperature(gen.n))/avg_exp_fi_t) / total_pseudo_fitness
             acum += rel
             mapped_individuals.append((ind, rel, acum))
 
@@ -114,9 +127,7 @@ class Boltzmann:
         selected_n = 0
 
         while selected_n < K:
-            r = random.uniform(0, 1)
-
-            rj = (r + selected_n)/K
+            rj = random.uniform(0, 1)
 
             i = 0
             while rj > mapped_individuals[i][2]:

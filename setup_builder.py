@@ -29,8 +29,8 @@ mutations = {
 selections = {
     'elite': Elite,
     'roulette': Roulette,
-    'universal': Roulette,
-    'boltzmann': Roulette,
+    'universal': Universal,
+    'boltzmann': Boltzmann,
     'det_tournaments': Roulette,
     'prob_tournaments': Roulette,
     'ranking': Roulette
@@ -48,6 +48,60 @@ stops = {
     'struct': Time,
     'content': Time
 }
+
+def get_selection(name, params):
+    method = selections.get(name, None)
+    if method is None:
+        print(f'Error: Selection method 1 "{name}" does not exist')
+        exit(1)
+
+    # if needs params
+    if name == 'boltzmann':
+
+        if params is None:
+            print(f'Error: {name} params missing')
+            exit(1)
+
+        if name == 'boltzmann':
+            initial_temp = params['initial_temp']
+            if initial_temp is None:
+                print(f'Error: Missing initial_temp param at {name}')
+                exit(1)
+            elif not (type(initial_temp) == int or type(initial_temp) == float):
+                print('Error: initial_temp must be a number')
+                exit(1)
+            initial_temp = float(initial_temp)
+            if initial_temp <= 0:
+                print('Error: initial_temp must be greater than 0')
+                exit(1)
+
+            min_temp = params['min_temp']
+            if min_temp is None:
+                print(f'Error: Missing min_temp param at {name}')
+                exit(1)
+            elif not (type(min_temp) == int or type(min_temp) == float):
+                print('Error: min_temp must be a number')
+                exit(1)
+            min_temp = float(min_temp)
+            if min_temp <= 0:
+                print('Error: min_temp must be greater than 0')
+                exit(1)
+
+            k = params['k']
+            if p is None:
+                print(f'Error: Missing k param at {name}')
+                exit(1)
+            elif not (type(k) == int or type(k) == float):
+                print('Error: k must be a number')
+                exit(1)
+            k = float(k)
+            if k <= 0:
+                print('Error: k must be greater than 0')
+                exit(1)
+
+            return method(initial_temp, min_temp, k)
+    else:
+        return method()
 
 def get_setup(config):
 
@@ -96,39 +150,19 @@ def get_setup(config):
 
     ## Method 1
 
-    method1 = selections.get(config.method1, None)
-    if method1 is None:
-        print(f'Error: Selection method 1 "{config.method1}" does not exist')
-        exit(1)
-
-    method1 = method1()
+    method1 = get_selection(config.method1, config.method1_params)
 
     ## Method 2
 
-    method2 = selections.get(config.method2, None)
-    if method2 is None:
-        print(f'Error: Selection method 2 "{config.method2}" does not exist')
-        exit(1)
-
-    method2 = method2()
+    method2 = get_selection(config.method2, config.method2_params)
 
     ## Method 3
 
-    method3 = selections.get(config.method3, None)
-    if method3 is None:
-        print(f'Error: Selection method 3 "{config.method3}" does not exist')
-        exit(1)
-
-    method3 = method3()
+    method3 = get_selection(config.method3, config.method3_params)
 
     ## Method 4
 
-    method4 = selections.get(config.method4, None)
-    if method4 is None:
-        print(f'Error: Selection method 4 "{config.method4}" does not exist')
-        exit(1)
-
-    method4 = method4()
+    method4 = get_selection(config.method4, config.method4_params)
 
     # Genetic operators
 
