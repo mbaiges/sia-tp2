@@ -24,22 +24,32 @@ def read_config():
 
         crossover = get_val_from_config(genetic_operators, 'crossover', True)
         crossover_opt = get_val_from_config(crossover, 'opt', True)
-        crossover_params= get_val_from_config(crossover, 'params', False)
+        crossover_params = get_val_from_config(crossover, 'params', False)
 
         mutation = get_val_from_config(genetic_operators, 'mutation', True)
         mutation_opt = get_val_from_config(mutation, 'opt', True)
+        mutation_params = get_val_from_config(mutation, 'params', False)
 
         selection = get_val_from_config(config, 'selection', True)
         K = get_val_from_config(selection, 'K', True)
         A = get_val_from_config(selection, 'A', True)
         B = get_val_from_config(selection, 'B', True)
         selection_method1 = get_val_from_config(selection, 'method1', True)
+        selection_method1_opt = get_val_from_config(selection_method1, 'opt', True)
+        selection_method1_params = get_val_from_config(selection_method1, 'params', False)
         selection_method2 = get_val_from_config(selection, 'method2', True)
+        selection_method2_opt = get_val_from_config(selection_method2, 'opt', True)
+        selection_method2_params = get_val_from_config(selection_method2, 'params', False)
         selection_method3 = get_val_from_config(selection, 'method3', True)
+        selection_method3_opt = get_val_from_config(selection_method3, 'opt', True)
+        selection_method3_params = get_val_from_config(selection_method3, 'params', False)
         selection_method4 = get_val_from_config(selection, 'method4', True)
+        selection_method4_opt = get_val_from_config(selection_method4, 'opt', True)
+        selection_method4_params = get_val_from_config(selection_method4, 'params', False)
 
         implementation = get_val_from_config(config, 'implementation', True)
         implementation_opt = get_val_from_config(implementation, 'opt', True)
+        implementation_params = get_val_from_config(implementation, 'params', False)
 
         stop = get_val_from_config(config, 'stop', True)
         stop_opt = get_val_from_config(stop, 'opt', True)
@@ -56,7 +66,7 @@ def read_config():
 
         initial_population = get_val_from_config(config, 'initial_population', True)
             
-        return Config(crossover_opt, crossover_params, mutation_opt, K, A, B, selection_method1, selection_method2, selection_method3, selection_method4, implementation_opt, stop_opt, stop_params, items_dataset_path, items_dataset_weapons_filename, items_dataset_boots_filename, items_dataset_helmets_filename, items_dataset_gloves_filename, items_dataset_breastplates_filename, character_class, initial_population)
+        return Config(crossover_opt, crossover_params, mutation_opt, mutation_params, K, A, B, selection_method1_opt, selection_method1_params, selection_method2_opt, selection_method2_params, selection_method3_opt, selection_method3_params, selection_method4_opt, selection_method4_params, implementation_opt, implementation_params, stop_opt, stop_params, items_dataset_path, items_dataset_weapons_filename, items_dataset_boots_filename, items_dataset_helmets_filename, items_dataset_gloves_filename, items_dataset_breastplates_filename, character_class, initial_population)
 
 def read_items(path, filename, item_contructor):
     full_path = os.path.join(path, filename)

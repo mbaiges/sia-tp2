@@ -11,7 +11,7 @@ class ItemsFilenames:
 
 class Config:
 
-    def __init__(self, crossover, crossover_params, mutation, mutation_params, K, A, B, method1, method1_params, method2, method2_params, method3, method3_params, method4, method4_params, implementation, stop, stop_params, items_dataset_path, weapons_filename, boots_filename, helmets_filename, gloves_filename, breastplates_filename, character_class, initial_population):
+    def __init__(self, crossover, crossover_params, mutation, mutation_params, K, A, B, method1, method1_params, method2, method2_params, method3, method3_params, method4, method4_params, implementation, implementation_params, stop, stop_params, items_dataset_path, weapons_filename, boots_filename, helmets_filename, gloves_filename, breastplates_filename, character_class, initial_population):
         self.crossover = crossover
         self.crossover_params = crossover_params
         self.mutation = mutation
@@ -28,6 +28,7 @@ class Config:
         self.method4 = method4
         self.method4_params = method4_params
         self.implementation = implementation
+        self.implementation_params = implementation_params
         self.stop = stop
         self.stop_params = stop_params
         self.items_dataset_path = items_dataset_path
@@ -54,6 +55,7 @@ class Config:
         s += f'\t\tmethod4: {self.method4}\n'
         s += f'\t\t\tmethod4_params: {self.method4_params}\n'
         s += f'\timplementation: {self.implementation}\n'
+        s += f'\t\timplementation_params: {self.implementation_params}\n'
         s += f'\tstop: {self.stop}\n'
         s += f'\t\tstop_params: {self.stop_params}\n'
         s += f'\titems_dataset:\n'
