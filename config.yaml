@@ -21,6 +21,22 @@ genetic_operators:
   mutation:
     # all options: gen, multi_limited, multi_uniform, full 
     opt: multi_uniform
+    params:
+      # in case of gen (p is the probability to mutate only one gene)\
+      # p between [0.0 - 1.0]
+      pg: 0.5
+
+      # in case of multi_limited (p is the probability to mutate [1-M] gens at random [where M is the ammount of gens])
+      # p between [0.0 - 1.0]
+      pml: 0.5
+      
+      # in case of multi_uniform (p is the probability of each gene to mutate)
+      # p between [0.0 - 1.0]
+      pmu: 0.5
+
+      # in case of full (p is the probability of mutating all gens or none)
+      # p between [0.0 - 1.0]
+      pf: 0.5
 
 selection:
   # number of individuals selected each generation
@@ -60,6 +76,10 @@ stop:
     # in case of acceptable
     mean_acceptable_fitness: 100
 
+    # in case of struct
+    # relevant_percentage_of_change: 0.7
+
+    
     # in case of content
     max_generations_counter: 5
 

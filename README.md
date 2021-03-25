@@ -52,6 +52,22 @@ genetic_operators:
   mutation:
     # all options: gen, multi_limited, multi_uniform, full 
     opt: multi_uniform
+    params:
+      # in case of gen (p is the probability to mutate only one gene)\
+      # p between [0.0 - 1.0]
+      p: 0.5
+
+      # in case of multi_limited (p is the probability to mutate [1-M] gens at random [where M is the ammount of gens])
+      # p between [0.0 - 1.0]
+      p: 0.5
+      
+      # in case of multi_uniform (p is the probability of each gene to mutate)
+      # p between [0.0 - 1.0]
+      p: 0.5
+
+      # in case of full (p is the probability of mutating all gens or none)
+      # p between [0.0 - 1.0]
+      p: 0.5
 
 selection:
   # number of individuals selected each generation

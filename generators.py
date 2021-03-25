@@ -1,11 +1,8 @@
 import random
-
-min_height = 1.3
-max_height = 2.0
+from constants import min_height, max_height
 
 def get_rand_item(items):
     idx = random.randint(0, len(items))
-
     return items[idx]
 
 def get_random_character(all_items, char_gen):
