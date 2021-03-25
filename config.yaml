@@ -40,7 +40,7 @@ genetic_operators:
 
 selection:
   # number of individuals selected each generation
-  K: 140
+  K: 15
   # [0.0-1.0]
   A: 0.5
   B: 0.0
@@ -97,4 +97,4 @@ items_dataset:
 character_class: warrior
 
 # natural number greater than zero
-initial_population: 160
+initial_population: 20

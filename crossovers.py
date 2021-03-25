@@ -14,7 +14,7 @@ def pair_parents(parents):
 
     while i < len(parents):
         if i == len(parents) - 1 : 
-            pparents.append([parents[i], parents[i+1]])
+            pparents.append([parents[i-1], parents[i]])
         else:
             pparents.append([parents[i], parents[i+1]])
         i += 2
@@ -27,9 +27,9 @@ class OnePoint:
     def __init__(self, p):
         self.p = p
 
-    def cross(parents, char_gen):
+    def cross(self, parents):
 
-        pair_parents(parents)
+        parents = pair_parents(parents)
         # Los parent vienen así [[p1, p2], [p3, p4], ......]
         
         children_gens = []
@@ -38,7 +38,7 @@ class OnePoint:
             i = 0 
             cgen1 = []
             cgen2 = []
-            while i < p:
+            while i < self.p:
                 cgen1.append(ppair[0].gens[i])
                 cgen2.append(ppair[1].gens[i])
                 i += 1
@@ -59,9 +59,9 @@ class TwoPoints:
         self.p1 = p1
         self.p2 = p2
 
-    def cross(parents, char_gen):
+    def cross(self, parents):
 
-        pair_parents(parents)
+        parents = pair_parents(parents)
 
         children_gens = []
 
@@ -69,11 +69,11 @@ class TwoPoints:
             i = 0 
             cgen1 = []
             cgen2 = []
-            while i < p1:
+            while i < self.p1:
                 cgen1.append(ppair[0].gens[i])
                 cgen2.append(ppair[1].gens[i])
                 i += 1
-            while i < p2:
+            while i < self.p2:
                 cgen1.append(ppair[1].gens[i])
                 cgen2.append(ppair[0].gens[i])
                 i += 1
@@ -92,9 +92,9 @@ class Anular:
         self.p = p
         self.l = l
 
-    def cross(parents, char_gen):
+    def cross(self, parents):
 
-        pair_parents(parents)
+        parents = pair_parents(parents)
         children_gens = []
 
         for ppair in parents:
@@ -103,7 +103,7 @@ class Anular:
             cgen2 = []
             size = len(ppair[0].gens)
             while i < size:
-                if (i > p and i < p+l) or (((p+l) % size < p) and i < ((p+l) % size)): 
+                if (i > self.p and i < self.p+self.l) or (((self.p+self.l) % size < self.p) and i < ((self.p+self.l) % size)): 
                     cgen1.append(ppair[1].gens[i])
                     cgen2.append(ppair[0].gens[i])
                 else:
@@ -123,9 +123,9 @@ class Uniform:
     def __init__(self, p):
         self.p = p
 
-    def cross(parents, char_gen):
+    def cross(self, parents):
         
-        pair_parents(parents)
+        parents = pair_parents(parents)
         # Los parent vienen así [[p1, p2], [p3, p4], ......]
         
         children_gens = []
@@ -136,7 +136,7 @@ class Uniform:
             cgen2 = []
             while i < len(ppair[0].gens):
                 randnum = random.uniform(0, 1)
-                if randnum < p:
+                if randnum < self.p:
                     cgen1.append(ppair[0].gens[i])
                     cgen2.append(ppair[1].gens[i])
                 else:

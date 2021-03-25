@@ -280,7 +280,7 @@ def get_setup(config):
             print('Error: pg must be between 0 and 1')
             exit(1)
         mutation = mutation(pg)
-    elif config.mutation == 'multi_limited'
+    elif config.mutation == 'multi_limited':
         pml = mutation_params['pml']
         if pml is None:
             print("Error: Missing pml param at mutation")
@@ -293,7 +293,7 @@ def get_setup(config):
             print('Error: pml must be between 0 and 1')
             exit(1)
         mutation = mutation(pml)
-    elif config.mutation == 'multi_uniform'
+    elif config.mutation == 'multi_uniform':
         pmu = mutation_params['pmu']
         if pmu is None:
             print("Error: Missing pmu param at mutation")
@@ -306,7 +306,7 @@ def get_setup(config):
             print('Error: pg must be between 0 and 1')
             exit(1)
         mutation = mutation(pmu)
-    elif config.mutation == 'full'
+    elif config.mutation == 'full':
         pf = mutation_params['pf']
         if pf is None:
             print("Error: Missing pf param at mutation")
