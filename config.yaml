@@ -51,6 +51,10 @@ stop:
     # in case of acceptable
     mean_acceptable_fitness: 100
 
+    # in case of struct
+    # relevant_percentage_of_change: 0.7
+
+    
     # in case of content
     max_generations_counter: 5
 

@@ -1,7 +1,7 @@
 from models import Warrior, Archer, Defender, Infiltrate, Setup
 from selections import Elite, Roulette
 from crossovers import OnePoint, TwoPoints, Anular, Uniform
-from stops import Time, Generations, Acceptable
+from stops import Time, Generations, Acceptable, Content
 
 from utils import read_all_items
 
@@ -46,7 +46,7 @@ stops = {
     'gens': Generations,
     'acceptable': Acceptable,
     'struct': Time,
-    'content': Time
+    'content': Content
 }
 
 def get_setup(config):
@@ -289,6 +289,20 @@ def get_setup(config):
                 print('Error: mean_acceptable_fitness must be greater than 0')
                 exit(1)
             stop = stop(mean_acceptable_fitness)
+        
+        # elif config.stop == 'struct':
+        #     relevant_percentage_of_change = stop_params['relevant_percentage_of_change']
+        #     if relevant_percentage_of_change is None:
+        #         print("Error: Missing relevant_percentage_of_change param at stop")
+        #         exit(1)
+        #     elif not (type(relevant_percentage_of_change) == int or type(relevant_percentage_of_change) == float):
+        #         print('Error: relevant_percentage_of_change must be a number')
+        #         exit(1)
+        #     relevant_percentage_of_change = float(relevant_percentage_of_change)
+        #     if relevant_percentage_of_change < 0 or relevant_percentage_of_change > 1:
+        #         print('Error: relevant_percentage_of_change must be between [0.0 - 1.0]')
+        #         exit(1)
+        #     stop = stop(relevant_percentage_of_change)
         
         elif config.stop == 'content':
             max_generations_counter = stop_params['max_generations_counter']
