@@ -1,5 +1,5 @@
 from models import Warrior, Archer, Defender, Infiltrate, Setup
-from selections import Elite, Roulette
+from selections import Elite, Roulette, Universal, Boltzmann
 from crossovers import OnePoint, TwoPoints, Anular, Uniform
 from stops import Time, Generations, Acceptable, Content
 
@@ -225,6 +225,30 @@ def get_setup(config):
     if mutation is None:
         print(f'Error: Crossover method "{config.mutation}" does not exist')
         exit(1)
+
+    # they all needs params
+    mutation_params = config.mutation_params
+
+    if mutation_params is None:
+        print("Error: Mutation params missing")
+        exit(1)
+
+    if config.mutation == 'gen':
+        p = mutation_params['p']
+        if p is None:
+            print("Error: Missing p param at mutation")
+            exit(1)
+        elif not (type(p) == int or type(p) == float):
+            print('Error: p must be a number')
+            exit(1)
+        p = float(p)
+        if p <= 0:
+            print('Error: p must be greater than 0')
+            exit(1)
+
+        mutation = mutation(p)
+    else:
+        mutation = mutation()
 
     # Implementation
 

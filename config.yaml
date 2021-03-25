@@ -29,10 +29,19 @@ selection:
   A: 0.5
   B: 0.0
   # all options: elite, roulette, universal, boltzmann, det_tournaments, prob_tournaments, ranking
-  method1: elite
-  method2: roulette
-  method3: roulette
-  method4: roulette
+  method1: 
+    opt: elite
+    params:
+      # in case of boltzmann
+      initial_temp: 50 
+      min_temp: 10
+      k: 2
+  method2: 
+    opt: roulette
+  method3: 
+    opt: roulette
+  method4: 
+    opt: roulette
 
 implementation: 
   # all options: fill_all, fill_parent
