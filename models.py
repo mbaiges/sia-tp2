@@ -247,6 +247,13 @@ class Generation:
                 res = ind.fitness
         return res
 
+    def max_fitness(self):
+        res = 0
+        for ind in self.individuals:
+            if ind.fitness > res:
+                res = ind.fitness
+        return res
+
     def mean_fitness(self):
         res = 0
         for ind in self.individuals:
