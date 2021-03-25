@@ -32,7 +32,7 @@ class OnePoint:
         pair_parents(parents)
         # Los parent vienen así [[p1, p2], [p3, p4], ......]
         
-        children = []
+        children_gens = []
 
         for ppair in parents:
             i = 0 
@@ -46,10 +46,10 @@ class OnePoint:
                 cgen1.append(ppair[1].gens[i])
                 cgen2.append(ppair[0].gens[i])
                 i += 1
-            children.append(char_gen(cgen1))
-            children.append(char_gen(cgen2))
+            children_gens.append(cgen1)
+            children_gens.append(cgen2)
         
-        return children                
+        return children_gens                
 
 
 
@@ -63,7 +63,7 @@ class TwoPoints:
 
         pair_parents(parents)
 
-        children = []
+        children_gens = []
 
         for ppair in parents:
             i = 0 
@@ -81,10 +81,10 @@ class TwoPoints:
                 cgen1.append(ppair[0].gens[i])
                 cgen2.append(ppair[1].gens[i])
                 i += 1
-            children.append(char_gen(cgen1))
-            children.append(char_gen(cgen2))
+            children_gens.append(cgen1)
+            children_gens.append(cgen2)
         
-        return children        
+        return children_gens        
 
 class Anular: 
 
@@ -95,7 +95,7 @@ class Anular:
     def cross(parents, char_gen):
 
         pair_parents(parents)
-        children = []
+        children_gens = []
 
         for ppair in parents:
             i = 0 
@@ -111,10 +111,10 @@ class Anular:
                     cgen2.append(ppair[1].gens[i])
                 i += 1
 
-            children.append(char_gen(cgen1))
-            children.append(char_gen(cgen2))
+            children_gens.append(cgen1)
+            children_gens.append(cgen2)
         
-        return children        
+        return children_gens        
 
 
 
@@ -128,7 +128,7 @@ class Uniform:
         pair_parents(parents)
         # Los parent vienen así [[p1, p2], [p3, p4], ......]
         
-        children = []
+        children_gens = []
 
         for ppair in parents:
             i = 0 
@@ -143,9 +143,9 @@ class Uniform:
                     cgen1.append(ppair[1].gens[i])
                     cgen2.append(ppair[0].gens[i])
                 i += 1
-            children.append(char_gen(cgen1))
-            children.append(char_gen(cgen2))
+            children_gens.append(cgen1)
+            children_gens.append(cgen2)
         
-        return children                
+        return children_gens                
 
 
