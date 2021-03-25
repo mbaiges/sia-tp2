@@ -11,17 +11,22 @@ class ItemsFilenames:
 
 class Config:
 
-    def __init__(self, crossover, crossover_params, mutation, K, A, B, method1, method2, method3, method4, implementation, stop, stop_params, items_dataset_path, weapons_filename, boots_filename, helmets_filename, gloves_filename, breastplates_filename, character_class, initial_population):
+    def __init__(self, crossover, crossover_params, mutation, mutation_params, K, A, B, method1, method1_params, method2, method2_params, method3, method3_params, method4, method4_params, implementation, stop, stop_params, items_dataset_path, weapons_filename, boots_filename, helmets_filename, gloves_filename, breastplates_filename, character_class, initial_population):
         self.crossover = crossover
         self.crossover_params = crossover_params
         self.mutation = mutation
+        self.mutation_params = mutation_params
         self.K = K
         self.A = A
         self.B = B
         self.method1 = method1
+        self.method1_params = method1_params
         self.method2 = method2
+        self.method2_params = method2_params
         self.method3 = method3
+        self.method3_params = method3_params
         self.method4 = method4
+        self.method4_params = method4_params
         self.implementation = implementation
         self.stop = stop
         self.stop_params = stop_params
@@ -35,14 +40,19 @@ class Config:
         s += f'\tcrossover: {self.crossover}\n'
         s += f'\t\tcrossover_params: {self.crossover_params}\n'
         s += f'\tmutation: {self.mutation}\n'
+        s += f'\t\tmutation_params: {self.mutation_params}\n'
         s += f'\tselection:\n'
         s += f'\t\tK: {self.K}\n'
         s += f'\t\tA: {self.A}\n'
         s += f'\t\tB: {self.B}\n'
         s += f'\t\tmethod1: {self.method1}\n'
+        s += f'\t\t\tmethod1_params: {self.method1_params}\n'
         s += f'\t\tmethod2: {self.method2}\n'
+        s += f'\t\t\tmethod2_params: {self.method2_params}\n'
         s += f'\t\tmethod3: {self.method3}\n'
+        s += f'\t\t\tmethod3_params: {self.method3_params}\n'
         s += f'\t\tmethod4: {self.method4}\n'
+        s += f'\t\t\tmethod4_params: {self.method4_params}\n'
         s += f'\timplementation: {self.implementation}\n'
         s += f'\tstop: {self.stop}\n'
         s += f'\t\tstop_params: {self.stop_params}\n'
