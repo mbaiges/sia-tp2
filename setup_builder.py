@@ -1,9 +1,9 @@
 from models import Warrior, Archer, Defender, Infiltrate, Setup
-from selections import Elite, Roulette, Universal, Boltzmann
+from selections import Elite, Roulette, Universal, Boltzmann, DeterministicTournaments, ProbabilisticTournaments, Ranking
 from crossovers import OnePoint, TwoPoints, Anular, Uniform
 from mutations import Gen, MultigenLimitada, MultigenUniforme, Completa
 from stops import Time, Generations, Acceptable, Content
-from implementations import FillAll
+from implementations import FillAll, FillParent
 
 from utils import read_all_items
 
@@ -33,14 +33,14 @@ selections = {
     'roulette': Roulette,
     'universal': Universal,
     'boltzmann': Boltzmann,
-    'det_tournaments': Roulette,
-    'prob_tournaments': Roulette,
-    'ranking': Roulette
+    'det_tournaments': DeterministicTournaments,
+    'prob_tournaments': ProbabilisticTournaments,
+    'ranking': Ranking
 }
 
 implementations = {
     'fill_all': FillAll,
-    'fill_parent': 'algo'
+    'fill_parent': FillParent
 }
 
 stops = {
@@ -59,7 +59,7 @@ def get_selection(name, params):
         exit(1)
 
     # if needs params
-    if name == 'boltzmann':
+    if name == 'boltzmann' or name == 'prob_tournaments':
 
         if params is None:
             print(f'Error: {name} params missing')
@@ -103,6 +103,21 @@ def get_selection(name, params):
                 exit(1)
 
             return method(initial_temp, min_temp, k)
+        elif name == 'prob_tournaments':
+            pt_threshold = params['pt_threshold']
+            
+            if pt_threshold is None:
+                print(f'Error: Missing pt_threshold param at {name}')
+                exit(1)
+            elif not (type(pt_threshold) == int or type(pt_threshold) == float):
+                print('Error: pt_threshold must be an integer or a float')
+                exit(1)
+            pt_threshold = float(pt_threshold)
+            if pt_threshold < 0.5 or pt_threshold > 1:
+                print('Error: pt_threshold must be in range [0.5 - 1]')
+                exit(1)
+
+            return method(pt_threshold)
     else:
         return method()
 
@@ -251,7 +266,7 @@ def get_setup(config):
         elif not (type(up) == int or type(up) == float):
             print('Error: up must be an integer or a float')
             exit(1)
-        up = int(up)
+        up = float(up)
         if up < 0 or up > 1:
             print('Error: up must be in range [0 - 1]')
             exit(1)

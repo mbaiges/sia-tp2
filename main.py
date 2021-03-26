@@ -39,12 +39,16 @@ def main():
 
     def select_A(individuals, gen_n, n):
         num = int(setup.A * n)
+        print("n_A = ", n)
+        print("num_A: ", num)
         ind1 = setup.method1.select(individuals, gen_n, num)
         ind2 = setup.method2.select(individuals, gen_n, 1-num)
         return ind1 + ind2
 
     def select_B(individuals, gen_n, n):
         num = int(setup.B * n)
+        print("n_B = ", n)
+        print("num_B: ", num)
         ind1 = setup.method3.select(individuals, gen_n, num)
         ind2 = setup.method4.select(individuals, gen_n, 1-num)
         return ind1 + ind2
@@ -56,6 +60,7 @@ def main():
 
     while not stop.reached_end(gen):
         print("Iteration number: ", gen_n)
+        print("Number of individuals: ", len(gen.individuals))
         
         # select parents
 
@@ -88,8 +93,6 @@ def main():
 
         gen_n += 1
         gen = Generation(new_individuals, gen_n)
-
-        print(len(new_individuals))
 
     ## end of while
 

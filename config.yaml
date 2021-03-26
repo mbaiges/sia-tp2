@@ -47,12 +47,16 @@ selection:
   B: 0.0
   # all options: elite, roulette, universal, boltzmann, det_tournaments, prob_tournaments, ranking
   method1: 
-    opt: elite
+    opt: ranking
     params:
       # in case of boltzmann
       initial_temp: 50 
       min_temp: 10
       k: 2
+
+      # in case of probabilistic tournaments
+      # pt_threshold between [0.5 - 1.0]
+      pt_threshold: 0.7
   method2: 
     opt: roulette
   method3: 
@@ -64,24 +68,23 @@ implementation:
   # all options: fill_all, fill_parent
   opt: fill_all
   params:
-    
     # in case of fill_all
-    fill_all_n: 50
+    fill_all_n: 18
 
     # in case of fill_parent
-    fill_parent_n: 50
+    fill_parent_n: 18
 
 
 
 stop:
   # all options: time, gens, acceptable, struct, content
-  opt: time
+  opt: gens
   params:
     # in case of time, declared in seconds
-    max_time: 30
+    max_time: 10
 
     # in case of gens
-    max_generation: 30
+    max_generation: 3
 
     # in case of acceptable
     mean_acceptable_fitness: 100
@@ -89,7 +92,6 @@ stop:
     # in case of struct
     # relevant_percentage_of_change: 0.7
 
-    
     # in case of content
     max_generations_counter: 5
 

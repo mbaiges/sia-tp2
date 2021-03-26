@@ -1,7 +1,8 @@
 import random
+import numpy as np
+
 from constants import min_height, max_height
 from generators import get_rand_item
-import numpy as np
 
 # gen = [height, items.weapon, items.boots, items.helmet, items.gloves, items.breastplate] 
 

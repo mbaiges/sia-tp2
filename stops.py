@@ -25,7 +25,7 @@ class Generations:
         return
 
     def reached_end(self, gen):
-        return gen.number >= max_generations
+        return gen.number >= self.max_generations
 
 
 
@@ -39,7 +39,7 @@ class Acceptable:
         return
 
     def reached_end(self, gen):
-        return gen.mean_fitness() >= mean_acceptable_fitness
+        return gen.mean_fitness() >= self.mean_acceptable_fitness
 
 
 # class Struct: #TODO
@@ -74,7 +74,7 @@ class Content:
         max_fit = gen.max_fitness()
         if current_max_fitness == max_fit:
             generations_counter += 1
-            if generations_counter == max_generations_counter:
+            if generations_counter == self.max_generations_counter:
                 return True
             return False
 
