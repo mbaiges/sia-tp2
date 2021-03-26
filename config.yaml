@@ -1,7 +1,7 @@
 genetic_operators:
   crossover:
     # all options: one_point, two_points, anular, uniform
-    opt: one_point
+    opt: uniform
     params:
       # in case of one_point
       p: 4 
@@ -20,7 +20,7 @@ genetic_operators:
 
   mutation:
     # all options: gen, multi_limited, multi_uniform, full 
-    opt: multi_uniform
+    opt: full
     params:
       # in case of gen (p is the probability to mutate only one gene)\
       # p between [0.0 - 1.0]
@@ -41,13 +41,13 @@ genetic_operators:
 
 selection:
   # number of individuals selected each generation
-  K: 15
+  K: 300
   # [0.0-1.0]
-  A: 0.5
-  B: 0.0
+  A: 0.6
+  B: 0.4
   # all options: elite, roulette, universal, boltzmann, det_tournaments, prob_tournaments, ranking
   method1: 
-    opt: ranking
+    opt: elite
     params:
       # in case of boltzmann
       initial_temp: 50 
@@ -58,23 +58,42 @@ selection:
       # pt_threshold between [0.5 - 1.0]
       pt_threshold: 0.7
   method2: 
-    opt: roulette
+    opt: elite
+    params:
+      # in case of boltzmann
+      initial_temp: 50 
+      min_temp: 10
+      k: 2
+
+      # in case of probabilistic tournaments
+      # pt_threshold between [0.5 - 1.0]
+      pt_threshold: 0.7
   method3: 
-    opt: roulette
+    opt: elite
+    params:
+      # in case of boltzmann
+      initial_temp: 50 
+      min_temp: 10
+      k: 2
+
+      # in case of probabilistic tournaments
+      # pt_threshold between [0.5 - 1.0]
+      pt_threshold: 0.7
   method4: 
-    opt: roulette
+    opt: elite
+    params:
+      # in case of boltzmann
+      initial_temp: 50 
+      min_temp: 10
+      k: 2
+
+      # in case of probabilistic tournaments
+      # pt_threshold between [0.5 - 1.0]
+      pt_threshold: 0.7
 
 implementation: 
   # all options: fill_all, fill_parent
-  opt: fill_all
-  params:
-    # in case of fill_all
-    fill_all_n: 18
-
-    # in case of fill_parent
-    fill_parent_n: 18
-
-
+  opt: fill_parent
 
 stop:
   # all options: time, gens, acceptable, struct, content
@@ -84,7 +103,7 @@ stop:
     max_time: 10
 
     # in case of gens
-    max_generation: 3
+    max_generation: 100000
 
     # in case of acceptable
     mean_acceptable_fitness: 100
@@ -106,7 +125,7 @@ items_dataset:
   breastplates_filename: pecheras.tsv
 
 # all options: warrior, archer, defender, infiltrate
-character_class: warrior
+character_class: infiltrate
 
 # natural number greater than zero
-initial_population: 20
+initial_population: 200

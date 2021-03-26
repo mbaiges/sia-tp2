@@ -91,7 +91,7 @@ def get_selection(name, params):
                 exit(1)
 
             k = params['k']
-            if p is None:
+            if k is None:
                 print(f'Error: Missing k param at {name}')
                 exit(1)
             elif not (type(k) == int or type(k) == float):
@@ -340,6 +340,16 @@ def get_setup(config):
             exit(1)
         mutation = mutation(pf)
 
+    # Initial population
+
+    initial_population = config.initial_population
+    if not type(initial_population) == int:
+        print('Error: initial_population must be an integer')
+        exit(1)
+    if initial_population <= 0:
+        print('Error: initial_population must be greater than 0')
+        exit(1)
+
     # Implementation-----------------------------------------------------------------------------
 
     implementation = implementations.get(config.implementation, None)
@@ -347,43 +357,7 @@ def get_setup(config):
         print(f'Error: Implementation method "{config.implementation}" does not exist')
         exit(1)
 
-    # if needs params
-    
-    implementation_params = config.implementation_params
-    
-    if implementation_params is None:
-        print("Error: Implementations params missing")
-        exit(1)
-
-    if config.implementation == 'fill_all':
-        fill_all_n = implementation_params['fill_all_n']
-        if fill_all_n is None:
-            print("Error: Missing fill_all_n param at Implementation")
-            exit(1)
-        elif not (type(fill_all_n) == int):
-            print('Error: fill_all_n must be a number')
-            exit(1)
-        fill_all_n = int(fill_all_n)
-        if fill_all_n <= 0:
-            print('Error: fill_all_n must be greater than 0')
-            exit(1)
-
-        implementation = implementation(fill_all_n)
-
-    elif config.implementation == 'fill_parent':
-        fill_parent_n = implementation_params['fill_parent_n']
-        if fill_parent_n is None:
-            print("Error: Missing fill_parent_n param at Implementation")
-            exit(1)
-        elif not (type(fill_parent_n) == int):
-            print('Error: fill_parent_n must be a number')
-            exit(1)
-        fill_parent_n = int(fill_parent_n)
-        if fill_parent_n <= 0:
-            print('Error: fill_parent_n must be greater than 0')
-            exit(1)
-
-        implementation = implementation(fill_parent_n)
+    implementation = implementation(initial_population)
     
     # Stop -------------------------------------------------------------
 
@@ -469,18 +443,6 @@ def get_setup(config):
             print('Error: max_generations_counter must be greater than 0')
             exit(1)
         stop = stop(max_generations_counter)
-            
-
-
-    # Initial population
-
-    initial_population = config.initial_population
-    if not type(initial_population) == int:
-        print('Error: initial_population must be an integer')
-        exit(1)
-    if initial_population <= 0:
-        print('Error: initial_population must be greater than 0')
-        exit(1)
 
     # Items loading
 

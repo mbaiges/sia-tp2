@@ -11,7 +11,8 @@ class ItemsFilenames:
 
 class Config:
 
-    def __init__(self, crossover, crossover_params, mutation, mutation_params, K, A, B, method1, method1_params, method2, method2_params, method3, method3_params, method4, method4_params, implementation, implementation_params, stop, stop_params, items_dataset_path, weapons_filename, boots_filename, helmets_filename, gloves_filename, breastplates_filename, character_class, initial_population):
+    def __init__(self
+        , crossover, crossover_params, mutation, mutation_params, K, A, B, method1, method1_params, method2, method2_params, method3, method3_params, method4, method4_params, implementation, stop, stop_params, items_dataset_path, weapons_filename, boots_filename, helmets_filename, gloves_filename, breastplates_filename, character_class, initial_population):
         self.crossover = crossover
         self.crossover_params = crossover_params
         self.mutation = mutation
@@ -28,7 +29,6 @@ class Config:
         self.method4 = method4
         self.method4_params = method4_params
         self.implementation = implementation
-        self.implementation_params = implementation_params
         self.stop = stop
         self.stop_params = stop_params
         self.items_dataset_path = items_dataset_path
@@ -55,7 +55,6 @@ class Config:
         s += f'\t\tmethod4: {self.method4}\n'
         s += f'\t\t\tmethod4_params: {self.method4_params}\n'
         s += f'\timplementation: {self.implementation}\n'
-        s += f'\t\timplementation_params: {self.implementation_params}\n'
         s += f'\tstop: {self.stop}\n'
         s += f'\t\tstop_params: {self.stop_params}\n'
         s += f'\titems_dataset:\n'
@@ -270,4 +269,52 @@ class Generation:
         res = 0
         for ind in self.individuals:
             res += ind.fitness
-        return res / len(self.individuals) 
+        return res / len(self.individuals)
+
+    def genetic_diversity(self):
+
+        weapons_ids = set()
+        boots_ids = set()
+        helmets_ids = set()
+        gloves_ids = set()
+        breastplates_ids = set()
+
+        for ind in self.individuals:
+            
+            items = ind.items
+            weapons_ids.add(items.weapon.id)
+            boots_ids.add(items.boots.id)
+            helmets_ids.add(items.helmet.id)
+            gloves_ids.add(items.gloves.id)
+            breastplates_ids.add(items.breastplate.id)
+
+        div =  {
+            'weapons': len(weapons_ids),
+            'boots': len(boots_ids),
+            'helmets': len(helmets_ids),
+            'gloves': len(gloves_ids),
+            'breastplates': len(breastplates_ids)
+        }
+
+        return div
+
+    def max_ind_stats(self):
+
+        res = 0
+        best_ind = None
+        for ind in self.individuals:
+            if ind.fitness > res:
+                res = ind.fitness
+                best_ind = ind
+
+        resp = {
+            'strength': best_ind.strength,
+            'agility': best_ind.agility,
+            'expertise':  best_ind.expertise,
+            'resistance': best_ind.resistance,
+            'life': best_ind.life,
+            'attack': best_ind.attack,
+            'defense': best_ind.defense
+        }
+        
+        return resp

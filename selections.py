@@ -117,7 +117,7 @@ class Boltzmann:
         acum = 0
 
         for ind in individuals:
-            rel = (self._exp_fi_t(ind, self._temperature(gen.n))/avg_exp_fi_t) / total_pseudo_fitness
+            rel = (self._exp_fi_t(ind, self._temperature(gen_n))/avg_exp_fi_t) / total_pseudo_fitness
             acum += rel
             mapped_individuals.append((ind, rel, acum))
 
@@ -140,7 +140,7 @@ class Boltzmann:
         return math.exp(ind.fitness/temp)
 
     def _temperature(self, n):
-        return self.min_temp + (self.initial_temp - self.min_temp)*math.exp(-k*n)
+        return self.min_temp + (self.initial_temp - self.min_temp)*math.exp(-self.k*n)
 
 class DeterministicTournaments:
 
@@ -229,8 +229,6 @@ class Ranking:
         for i in range(0, len(sorted_mp_inds)):
             sorted_mp_inds[i][1] = pseudo_fitness(i)
             total_pseudo_fitness += pseudo_fitness(i)
-
-        print(mp_inds)
 
         mapped_individuals = []
         acum = 0

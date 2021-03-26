@@ -49,7 +49,6 @@ def read_config():
 
         implementation = get_val_from_config(config, 'implementation', True)
         implementation_opt = get_val_from_config(implementation, 'opt', True)
-        implementation_params = get_val_from_config(implementation, 'params', False)
 
         stop = get_val_from_config(config, 'stop', True)
         stop_opt = get_val_from_config(stop, 'opt', True)
@@ -66,7 +65,7 @@ def read_config():
 
         initial_population = get_val_from_config(config, 'initial_population', True)
             
-        return Config(crossover_opt, crossover_params, mutation_opt, mutation_params, K, A, B, selection_method1_opt, selection_method1_params, selection_method2_opt, selection_method2_params, selection_method3_opt, selection_method3_params, selection_method4_opt, selection_method4_params, implementation_opt, implementation_params, stop_opt, stop_params, items_dataset_path, items_dataset_weapons_filename, items_dataset_boots_filename, items_dataset_helmets_filename, items_dataset_gloves_filename, items_dataset_breastplates_filename, character_class, initial_population)
+        return Config(crossover_opt, crossover_params, mutation_opt, mutation_params, K, A, B, selection_method1_opt, selection_method1_params, selection_method2_opt, selection_method2_params, selection_method3_opt, selection_method3_params, selection_method4_opt, selection_method4_params, implementation_opt, stop_opt, stop_params, items_dataset_path, items_dataset_weapons_filename, items_dataset_boots_filename, items_dataset_helmets_filename, items_dataset_gloves_filename, items_dataset_breastplates_filename, character_class, initial_population)
 
 def read_items(path, filename, item_contructor):
     full_path = os.path.join(path, filename)

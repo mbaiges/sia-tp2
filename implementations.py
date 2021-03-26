@@ -2,29 +2,20 @@
 
 class FillAll:
 
-    def __init__(self, fill_all_n):
-        self.fill_all_n = fill_all_n
+    def __init__(self, N):
+        self.N = N
     
-
     def fill(self, parents, children, gen_n, selection_method):
-        children_copy = children.copy()
-        parents_selected = selection_method(parents, gen_n, self.fill_all_n)
-        
-        return children_copy + parents_selected
-
-
+        return selection_method(parents + children, gen_n, self.N)
 
 class FillParent:
 
-    def __init__(self, fill_parent_n):
-        self.fill_parent_n = fill_parent_n
+    def __init__(self, N):
+        self.N = N
     
-
     def fill(self, parents, children, gen_n, selection_method):
         child_amount = len(children)
-        if self.fill_parent_n < child_amount :
-            return selection_method(children, gen_n, self.fill_parent_n)
+        if child_amount < self.N:
+            return children + selection_method(parents, gen_n, self.N - child_amount)
         else:
-            children_copy = children.copy()
-            parents_selected = selection_method(parents, gen_n, self.fill_all_n - child_amount)
-            return children_copy + parents_selected
+            return selection_method(children, gen_n, self.N)
