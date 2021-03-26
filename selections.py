@@ -3,12 +3,12 @@ import math
 
 class Elite:
 
-    def select(self, gen, K):
+    def select(self, individuals, gen_n, K):
 
         def key_f(ind):
             return ind.fitness
 
-        sorted_individuals = sorted(gen.individuals, key=key_f, reverse=True)
+        sorted_individuals = sorted(individuals, key=key_f, reverse=True)
 
         N = len(sorted_individuals)
 
@@ -28,17 +28,17 @@ class Elite:
 
 class Roulette:
 
-    def select(self, gen, K):
+    def select(self, individuals, gen_n, K):
         
         total_fitness = 0
 
-        for ind in gen.individuals:
+        for ind in individuals:
             total_fitness += ind.fitness
 
         mapped_individuals = []
         acum = 0
 
-        for ind in gen.individuals:
+        for ind in individuals:
             rel = ind.fitness / total_fitness
             acum += rel
             mapped_individuals.append((ind, rel, acum))
@@ -60,17 +60,17 @@ class Roulette:
 
 class Universal:
 
-    def select(self, gen, K):
+    def select(self, individuals, gen_n, K):
         
         total_fitness = 0
 
-        for ind in gen.individuals:
+        for ind in individuals:
             total_fitness += ind.fitness
 
         mapped_individuals = []
         acum = 0
 
-        for ind in gen.individuals:
+        for ind in individuals:
             rel = ind.fitness / total_fitness
             acum += rel
             mapped_individuals.append((ind, rel, acum))
@@ -99,26 +99,24 @@ class Boltzmann:
         self.min_temp = min_temp
         self.k = k
 
-    def select(self, gen, K):
-
-        n = gen.number
+    def select(self, individuals, gen_n, K):
 
         avg_exp_fi_t = 0
 
-        for ind in gen.individuals:
-            avg_exp_fi_t += self._exp_fi_t(ind, self._temperature(gen.number))
+        for ind in individuals:
+            avg_exp_fi_t += self._exp_fi_t(ind, self._temperature(gen_n))
 
-        avg_exp_fi_t /= len(gen.individuals)
+        avg_exp_fi_t /= len(individuals)
 
         total_pseudo_fitness = 0
 
-        for ind in gen.individuals:
-            total_pseudo_fitness += (self._exp_fi_t(ind, self._temperature(gen.n))/avg_exp_fi_t)
+        for ind in individuals:
+            total_pseudo_fitness += (self._exp_fi_t(ind, self._temperature(gen_n))/avg_exp_fi_t)
 
         mapped_individuals = []
         acum = 0
 
-        for ind in gen.individuals:
+        for ind in individuals:
             rel = (self._exp_fi_t(ind, self._temperature(gen.n))/avg_exp_fi_t) / total_pseudo_fitness
             acum += rel
             mapped_individuals.append((ind, rel, acum))

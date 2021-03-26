@@ -1,3 +1,6 @@
+import signal
+import sys
+
 from utils import read_config
 from setup_builder import get_setup
 from generators import get_initial_population
@@ -12,8 +15,14 @@ def get_children(genes, char_gen):
 
     return children
 
+def sigint_handler(sig, frame):
+    print('Exiting')
+    sys.exit(0)
 
 def main():
+
+    signal.signal(signal.SIGINT, sigint_handler)
+
     config = read_config()
 
     print(config)
@@ -28,16 +37,16 @@ def main():
     gen = Generation(initial_individuals, 0)
     gen_n = 0
 
-    def select_A(gen, n):
+    def select_A(individuals, gen_n, n):
         num = int(setup.A * n)
-        ind1 = setup.method1.select(gen, num)
-        ind2 = setup.method2.select(gen, 1-num)
+        ind1 = setup.method1.select(individuals, gen_n, num)
+        ind2 = setup.method2.select(individuals, gen_n, 1-num)
         return ind1 + ind2
 
-    def select_B(gen, n):
+    def select_B(individuals, gen_n, n):
         num = int(setup.B * n)
-        ind1 = setup.method3.select(gen, num)
-        ind2 = setup.method4.select(gen, 1-num)
+        ind1 = setup.method3.select(individuals, gen_n, num)
+        ind2 = setup.method4.select(individuals, gen_n, 1-num)
         return ind1 + ind2
 
     print("First population")
@@ -50,7 +59,7 @@ def main():
         
         # select parents
 
-        parents = select_A(gen, K)
+        parents = select_A(gen.individuals, gen_n, setup.K)
 
         # print("Parents in iteration:", parents)
 
@@ -75,12 +84,16 @@ def main():
 
         # implementation (fill all / fill parent)
 
-        new_individuals = setup.fill.fill(gen.individuals, children, select)
+        new_individuals = setup.implementation.fill(gen.individuals, children, gen_n, select_B)
 
         gen_n += 1
+        gen = Generation(new_individuals, gen_n)
 
-        return
+        print(len(new_individuals))
+
     ## end of while
+
+    print(gen.individuals[0])
 
     print("End reached")
 

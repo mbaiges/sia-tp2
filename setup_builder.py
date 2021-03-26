@@ -161,12 +161,12 @@ def get_setup(config):
 
     ## Method 3
 
-        method3 = get_selection(config.method3, config.method3_params)
+    method3 = get_selection(config.method3, config.method3_params)
 
 
     ## Method 4
 
-        method4 = get_selection(config.method4, config.method4_params)
+    method4 = get_selection(config.method4, config.method4_params)
 
 
     # Genetic operators
@@ -260,7 +260,7 @@ def get_setup(config):
 
     ## Mutation ---------------------------------------------------------------------------------
 
-     mutation = mutations.get(config.mutation, None)
+    mutation = mutations.get(config.mutation, None)
     if mutation is None:
         print(f'Error: Mutation method "{config.mutation}" does not exist')
         exit(1)
