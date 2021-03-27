@@ -27,13 +27,16 @@ def get_children(genes, char_gen):
 def sigint_handler(sig, frame):
     print('Exiting')
 
-    global fitness_plotter, diversity_plotter
+    global fitness_plotter, diversity_plotter, best_ind_stats_plotter
 
     if not fitness_plotter is None:
         fitness_plotter.terminate()
 
     if not diversity_plotter is None:
         diversity_plotter.terminate()
+
+    if not best_ind_stats_plotter is None:
+        best_ind_stats_plotter.terminate()
 
     sys.exit(0)
 
@@ -55,8 +58,11 @@ if __name__ == '__main__':
     # multiprocessing
 
     fitness_plotter_q = mp.Queue()
+    fitness_plotter_q.cancel_join_thread()
     diversity_plotter_q = mp.Queue()
+    diversity_plotter_q.cancel_join_thread()
     best_ind_stats_plotter_q = mp.Queue()
+    best_ind_stats_plotter_q.cancel_join_thread()
 
     fitness_plotter = mp.Process(target=plot_min_and_mean_fitness, args=((fitness_plotter_q),))
     fitness_plotter.start()
@@ -67,7 +73,7 @@ if __name__ == '__main__':
     best_ind_stats_plotter = mp.Process(target=plot_best_ind_stats, args=((best_ind_stats_plotter_q),))
     best_ind_stats_plotter.start()
 
-    # starts processing
+    # # starts processing
 
     initial_population = setup.initial_population
 
@@ -127,14 +133,14 @@ if __name__ == '__main__':
         gen_n += 1
         gen = Generation(new_individuals, gen_n)
 
-    ## end of while
+    # print("Min fitness: ", gen.min_fitness())
+    # print("Mean fitness: ", gen.mean_fitness())
+    # print("Max fitness: ", gen.max_fitness())
 
-    print("Min fitness: ", gen.min_fitness())
-    print("Mean fitness: ", gen.mean_fitness())
-    print("Max fitness: ", gen.max_fitness())
-
-    print("End reached")
+    # print("End reached")
 
     # fitness_plotter.terminate()
     # diversity_plotter.terminate()
     # best_ind_stats_plotter.terminate()
+
+    exit(0)
