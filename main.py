@@ -1,6 +1,7 @@
 import signal
 import sys
 import multiprocessing as mp
+import keyboard
 
 from utils import read_config
 from setup_builder import get_setup
@@ -65,12 +66,15 @@ if __name__ == '__main__':
     best_ind_stats_plotter_q.cancel_join_thread()
 
     fitness_plotter = mp.Process(target=plot_min_and_mean_fitness, args=((fitness_plotter_q),))
+    fitness_plotter.daemon = True
     fitness_plotter.start()
 
     diversity_plotter = mp.Process(target=plot_genetic_diversity, args=((diversity_plotter_q),))
+    diversity_plotter.daemon = True
     diversity_plotter.start()
 
     best_ind_stats_plotter = mp.Process(target=plot_best_ind_stats, args=((best_ind_stats_plotter_q),))
+    best_ind_stats_plotter.daemon = True
     best_ind_stats_plotter.start()
 
     # # starts processing
@@ -133,14 +137,24 @@ if __name__ == '__main__':
         gen_n += 1
         gen = Generation(new_individuals, gen_n)
 
-    # print("Min fitness: ", gen.min_fitness())
-    # print("Mean fitness: ", gen.mean_fitness())
-    # print("Max fitness: ", gen.max_fitness())
+    fitness_plotter_q.put("STOP")
+    diversity_plotter_q.put("STOP")
+    best_ind_stats_plotter_q.put("STOP")
 
-    # print("End reached")
+    print("Min fitness: ", gen.min_fitness())
+    print("Mean fitness: ", gen.mean_fitness())
+    print("Max fitness: ", gen.max_fitness())
+
+    print("End reached")
+
+    print("Press 'q' to finish")
+
+    keyboard.wait("q")
 
     # fitness_plotter.terminate()
     # diversity_plotter.terminate()
     # best_ind_stats_plotter.terminate()
+
+    print("Exiting")
 
     exit(0)

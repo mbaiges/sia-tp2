@@ -1,5 +1,7 @@
 import math
 
+from constants import min_height, max_height
+
 class ItemsFilenames:
 
     def __init__(self, weapons_filename, boots_filename, helmets_filename, gloves_filename, breastplates_filename):
@@ -248,6 +250,7 @@ class Setup:
 class Generation:
 
     def __init__(self, individuals, number):
+        self.height_margin = 0.05
         self.individuals = individuals
         self.number = number
 
@@ -273,6 +276,9 @@ class Generation:
 
     def genetic_diversity(self):
 
+        m = int(self.height_margin * 100)
+        heights = [0 for a in range(0, int(((max_height - min_height - 0.001)*100)/m) + 1)]
+
         weapons_ids = set()
         boots_ids = set()
         helmets_ids = set()
@@ -280,15 +286,25 @@ class Generation:
         breastplates_ids = set()
 
         for ind in self.individuals:
-            
+
+            height = ind.height
+            heights[int(((height - min_height - 0.001)*100)/m)] += 1
+
             items = ind.items
-            weapons_ids.add(items.weapon.id)
-            boots_ids.add(items.boots.id)
-            helmets_ids.add(items.helmet.id)
-            gloves_ids.add(items.gloves.id)
-            breastplates_ids.add(items.breastplate.id)
+            weapons_ids.add(int(items.weapon.id))
+            boots_ids.add(int(items.boots.id))
+            helmets_ids.add(int(items.helmet.id))
+            gloves_ids.add(int(items.gloves.id))
+            breastplates_ids.add(int(items.breastplate.id))
+
+        distincts_heights = 0
+
+        for h in heights:
+            if h > 0:
+                distincts_heights += 1
 
         div =  {
+            'heights': distincts_heights,
             'weapons': len(weapons_ids),
             'boots': len(boots_ids),
             'helmets': len(helmets_ids),
@@ -318,3 +334,22 @@ class Generation:
         }
         
         return resp
+
+    def genetic_diversity_bag(self):
+
+        m = int(self.height_margin * 100)
+
+        bag = {}
+
+        for ind in self.individuals:
+            height = ind.height
+            items = ind.items
+
+            t = (int(((height - min_height - 0.001)*100)/m), int(items.weapon.id), int(items.boots.id), int(items.helmet.id), int(items.gloves.id), int(items.breastplate.id))
+
+            if not t in bag:
+                bag[t] = 0
+
+            bag[t] += 1
+
+        return bag

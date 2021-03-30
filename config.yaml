@@ -41,7 +41,7 @@ genetic_operators:
 
 selection:
   # number of individuals selected each generation
-  K: 300
+  K: 50
   # [0.0-1.0]
   A: 0.6
   B: 0.4
@@ -97,19 +97,20 @@ implementation:
 
 stop:
   # all options: time, gens, acceptable, struct, content
-  opt: gens
+  opt: struct
   params:
     # in case of time, declared in seconds
     max_time: 10
 
     # in case of gens
-    max_generation: 100000
+    max_generation: 100
 
     # in case of acceptable
     mean_acceptable_fitness: 100
 
     # in case of struct
-    # relevant_percentage_of_change: 0.7
+    relevant_percentage_of_change: 0.7
+    considered_gens: 15
 
     # in case of content
     max_generations_counter: 5
@@ -117,7 +118,7 @@ stop:
 
 # path to tsv dile conataining all items info
 items_dataset: 
-  path: allitems
+  path: allitems_test
   weapons_filename: armas.tsv
   boots_filename: botas.tsv
   helmets_filename: cascos.tsv
@@ -128,4 +129,4 @@ items_dataset:
 character_class: infiltrate
 
 # natural number greater than zero
-initial_population: 200
+initial_population: 100

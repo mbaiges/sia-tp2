@@ -42,21 +42,52 @@ class Acceptable:
         return gen.mean_fitness() >= self.mean_acceptable_fitness
 
 
-# class Struct: #TODO
-#     current_generation = None
-#     def __init__(self, relevant_percentage_of_change):
-#         self.relevant_percentage_of_change = relevant_percentage_of_change
+class Struct:
     
-#     def ready(self):
-#         return
+    def __init__(self, relevant_percentage_of_change, considered_gens):
+        self.relevant_percentage_of_change = relevant_percentage_of_change
+        self.considered_gens = considered_gens
+        self.bags = []
+    
+    def ready(self):
+        return
 
-#     def reached_end(self, gen):
-#         if  current_generation is None:
-#             current_generation = gen
-#             return False
+    def reached_end(self, gen):
+        print(f"Gen N {gen.number} - Bags recorded: {len(self.bags)}")
 
-#         if 
-#         return gen.mean_fitness() >= mean_acceptable_fitness
+        if len(self.bags) < self.considered_gens:
+            self.bags.append(gen.genetic_diversity_bag())
+            return False
+        elif len(self.bags) == self.considered_gens:
+            self.bags.pop(0)
+            self.bags.append(gen.genetic_diversity_bag())
+
+        int_bag = {}
+
+        for bag in self.bags:
+            for t, amount in bag.items():
+                int_bag[t] = amount
+
+        for i in range(0, len(self.bags) - 1):
+            bag = self.bags[i]
+            for t, amount in bag.items():
+                if t in int_bag and amount < int_bag[t]:
+                    int_bag[t] = amount
+            
+            for t in int_bag.copy():
+                if t not in bag:
+                    int_bag.pop(t)
+
+        values = int_bag.values()
+
+        unchanged = 0
+
+        if values:
+            unchanged = sum(values)
+
+        print(f"Similarity: {(unchanged / len(gen.individuals) * 1.0)}")
+
+        return (unchanged / len(gen.individuals) * 1.0) >= self.relevant_percentage_of_change
 
 
 class Content:

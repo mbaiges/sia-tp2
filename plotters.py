@@ -2,7 +2,15 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import matplotlib.animation as animation
 
+finished_min_and_mean = False
+finished_genetic_diversity = False
+finished_best_ind_stats = False
+
 def plot_min_and_mean_fitness(q):
+
+    global finished_min_and_mean
+
+    finished_min_and_mean = False
 
     # generations
     gens = []
@@ -17,7 +25,16 @@ def plot_min_and_mean_fitness(q):
     ax1 = fig.add_subplot(1,1,1)
 
     def animate(i): 
+        global finished_min_and_mean
+
+        if finished_min_and_mean:
+            return
+
         gen = q.get()
+
+        if gen == "STOP":
+            finished_min_and_mean = True
+            return
 
         gens.append(gen.number)
         min_fitness.append(gen.min_fitness())
@@ -43,8 +60,15 @@ def plot_min_and_mean_fitness(q):
 
 def plot_genetic_diversity(q):
 
+    global finished_genetic_diversity
+
+    finished_genetic_diversity = False
+
     # generations
     gens = []
+
+    # heights
+    heights_divs = []
 
     # fitnesses
     weapons_divs = []
@@ -58,12 +82,22 @@ def plot_genetic_diversity(q):
     ax1 = fig.add_subplot(1,1,1)
 
     def animate(i): 
+        global finished_genetic_diversity        
+
+        if finished_genetic_diversity:
+            return
+
         gen = q.get()
+
+        if gen == "STOP":
+            finished_genetic_diversity = True
+            return
 
         div = gen.genetic_diversity()
 
         gens.append(gen.number)
         
+        heights_divs.append(div['heights'])
         weapons_divs.append(div['weapons'])
         boots_divs.append(div['boots'])
         helmets_divs.append(div['helmets'])
@@ -76,13 +110,14 @@ def plot_genetic_diversity(q):
         plt.ylabel("Diversity")
         plt.title("Genetic diversity")
 
+        l0, = ax1.plot(gens, heights_divs, color='#2efff8', linestyle='solid')
         l1, = ax1.plot(gens, weapons_divs, color='#2a5de8', linestyle='solid')
         l2, = ax1.plot(gens, boots_divs, color='#daff1f', linestyle='solid')
         l3, = ax1.plot(gens, helmets_divs, color='#e61ee2', linestyle='solid')
         l4, = ax1.plot(gens, gloves_divs, color='#18f545', linestyle='solid')
         l5, = ax1.plot(gens, breastplates_divs, color='#ffd336', linestyle='solid')
 
-        plt.legend([l1, l2, l3, l4, l5],["Weapons diversity", "Boots diversity", "Helmets diversity", "Gloves diversity", "Breastplates diversity"])
+        plt.legend([l0, l1, l2, l3, l4, l5],["Heights", "Weapons diversity", "Boots diversity", "Helmets diversity", "Gloves diversity", "Breastplates diversity"])
         
     ani = animation.FuncAnimation(fig, animate, interval=100) 
     plt.show()
@@ -91,6 +126,10 @@ def plot_genetic_diversity(q):
 
 
 def plot_best_ind_stats(q):
+
+    global finished_best_ind_stats
+
+    finished_best_ind_stats = False
 
     # generations
     gens = []
@@ -114,7 +153,17 @@ def plot_best_ind_stats(q):
     # fig, (ax1, ax2, ax3) = plt.subplots(3)
 
     def animate(i): 
+        global finished_best_ind_stats
+
+        if finished_best_ind_stats:
+            return
+
         gen = q.get()
+
+        if gen == "STOP":
+            finished_best_ind_stats = True
+            return
+
         bests_ind_stats = gen.max_ind_stats()
         gens.append(gen.number)
         
