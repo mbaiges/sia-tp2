@@ -117,7 +117,7 @@ def plot_genetic_diversity(q):
         l4, = ax1.plot(gens, gloves_divs, color='#18f545', linestyle='solid')
         l5, = ax1.plot(gens, breastplates_divs, color='#ffd336', linestyle='solid')
 
-        plt.legend([l0, l1, l2, l3, l4, l5],["Heights", "Weapons diversity", "Boots diversity", "Helmets diversity", "Gloves diversity", "Breastplates diversity"])
+        plt.legend([l0, l1, l2, l3, l4, l5],["Heights diversity", "Weapons diversity", "Boots diversity", "Helmets diversity", "Gloves diversity", "Breastplates diversity"])
         
     ani = animation.FuncAnimation(fig, animate, interval=100) 
     plt.show()

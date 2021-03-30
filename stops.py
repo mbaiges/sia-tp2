@@ -53,7 +53,7 @@ class Struct:
         return
 
     def reached_end(self, gen):
-        print(f"Gen N {gen.number} - Bags recorded: {len(self.bags)}")
+        # print(f"Gen N {gen.number} - Bags recorded: {len(self.bags)}")
 
         if len(self.bags) < self.considered_gens:
             self.bags.append(gen.genetic_diversity_bag())
@@ -85,7 +85,7 @@ class Struct:
         if values:
             unchanged = sum(values)
 
-        print(f"Similarity: {(unchanged / len(gen.individuals) * 1.0)}")
+        # print(f"Similarity: {(unchanged / len(gen.individuals) * 1.0)}")
 
         return (unchanged / len(gen.individuals) * 1.0) >= self.relevant_percentage_of_change
 
