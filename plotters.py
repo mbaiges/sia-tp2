@@ -206,7 +206,13 @@ def plot_best_ind_stats(q):
 
 
 
-def plot_data(matrix, avg_array):
+def plot_data(matrix, avg_array, title):
+
+    print(f"Generating graph '{title}'")
+
+    plt.xlabel("Generation")
+    plt.ylabel("Fitness")
+    plt.title(title)
 
     for i in range(0, len(matrix)):
         plt.plot(matrix[i], color='#2efff8', linestyle='solid')
@@ -217,7 +223,13 @@ def plot_data(matrix, avg_array):
 
     return
 
-def plot_all_data(max_fitness_matrix, mean_fitness_matrix, min_fitness_matrix, avg_max_fitness, avg_mean_fitness, avg_min_fitness):
+def plot_all_data(max_fitness_matrix, mean_fitness_matrix, min_fitness_matrix, avg_max_fitness, avg_mean_fitness, avg_min_fitness, title):
+    
+    print(f"Generating graph '{title}'")
+    
+    plt.xlabel("Generation")
+    plt.ylabel("Fitness")
+    plt.title(title)
     
     for i in range(0, len(max_fitness_matrix)):
         plt.plot(max_fitness_matrix[i], color='#f59c95', linestyle='solid')

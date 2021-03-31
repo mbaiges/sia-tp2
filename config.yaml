@@ -12,7 +12,7 @@ genetic_operators:
 
   mutation:
     # all options: gen, multi_limited, multi_uniform, full 
-    opt: full
+    opt: multi_uniform
     params:
       # in case of gen (pg is the probability to mutate only one gene)\
       # p between [0.0 - 1.0]
@@ -33,55 +33,51 @@ genetic_operators:
 
 selection:
   # number of individuals selected each generation
-  K: 50
+  K: 100
   # [0.0-1.0]
-  A: 0.6
-  B: 0.4
+  A: 0.8
+  B: 0.8
   # all options: elite, roulette, universal, boltzmann, det_tournaments, prob_tournaments, ranking
   method1: 
-    opt: elite
+    opt: boltzmann
     params:
       # in case of boltzmann
       initial_temp: 50 
-      min_temp: 10
+      min_temp: 1
       k: 2
-
       # in case of probabilistic tournaments
       # pt_threshold between [0.5 - 1.0]
-      pt_threshold: 0.7
+      pt_threshold: 0.5
   method2: 
-    opt: elite
+    opt: boltzmann
     params:
       # in case of boltzmann
       initial_temp: 50 
-      min_temp: 10
+      min_temp: 1
       k: 2
-    
       # in case of probabilistic tournaments
       # pt_threshold between [0.5 - 1.0]
-      pt_threshold: 0.7
+      pt_threshold: 0.5
   method3: 
-    opt: elite
+    opt: boltzmann
     params:
       # in case of boltzmann
       initial_temp: 50 
-      min_temp: 10
+      min_temp: 1
       k: 2
-    
       # in case of probabilistic tournaments
       # pt_threshold between [0.5 - 1.0]
-      pt_threshold: 0.7
+      pt_threshold: 0.5
   method4: 
-    opt: elite
+    opt: boltzmann
     params:
       # in case of boltzmann
       initial_temp: 50 
-      min_temp: 10
+      min_temp: 1
       k: 2
-
       # in case of probabilistic tournaments
       # pt_threshold between [0.5 - 1.0]
-      pt_threshold: 0.7
+      pt_threshold: 0.5
 
 implementation: 
   # all options: fill_all, fill_parent
@@ -118,10 +114,10 @@ items_dataset:
   breastplates_filename: pecheras.tsv
 
 # all options: warrior, archer, defender, infiltrate
-character_class: infiltrate
+character_class: warrior
 
 # natural number greater than zero
-initial_population: 100
+initial_population: 200
 
 # to run multiple iterations
 multiple_times:

@@ -142,11 +142,11 @@ def parse_results(setup, iterations):
         avg_mean_fitness[g] = avg_mean_fitness[g] / iteration_amnt 
         avg_min_fitness[g] = avg_min_fitness[g] / iteration_amnt 
 
-    plot_data(max_fitness_matrix, avg_max_fitness)
-    plot_data(mean_fitness_matrix, avg_mean_fitness)
-    plot_data(min_fitness_matrix, avg_min_fitness)
+    plot_data(max_fitness_matrix, avg_max_fitness, f"Max fitnesses over {iteration_amnt} iterations and avg")
+    plot_data(mean_fitness_matrix, avg_mean_fitness, f"Mean fitnesses over {iteration_amnt} iterations and avg")
+    plot_data(min_fitness_matrix, avg_min_fitness, f"Min fitnesses over {iteration_amnt} iterations and avg")
 
-    plot_all_data(max_fitness_matrix, mean_fitness_matrix, min_fitness_matrix, avg_max_fitness, avg_mean_fitness, avg_min_fitness)
+    plot_all_data(max_fitness_matrix, mean_fitness_matrix, min_fitness_matrix, avg_max_fitness, avg_mean_fitness, avg_min_fitness, f"Max/Mean/Min fitnesses over {iteration_amnt} iterations and avg")
 
     return
 

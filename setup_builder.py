@@ -66,18 +66,6 @@ def get_selection(name, params):
             exit(1)
 
         if name == 'boltzmann':
-            initial_temp = params['initial_temp']
-            if initial_temp is None:
-                print(f'Error: Missing initial_temp param at {name}')
-                exit(1)
-            elif not (type(initial_temp) == int or type(initial_temp) == float):
-                print('Error: initial_temp must be a number')
-                exit(1)
-            initial_temp = float(initial_temp)
-            if initial_temp <= 0:
-                print('Error: initial_temp must be greater than 0')
-                exit(1)
-
             min_temp = params['min_temp']
             if min_temp is None:
                 print(f'Error: Missing min_temp param at {name}')
@@ -88,6 +76,18 @@ def get_selection(name, params):
             min_temp = float(min_temp)
             if min_temp <= 0:
                 print('Error: min_temp must be greater than 0')
+                exit(1)
+
+            initial_temp = params['initial_temp']
+            if initial_temp is None:
+                print(f'Error: Missing initial_temp param at {name}')
+                exit(1)
+            elif not (type(initial_temp) == int or type(initial_temp) == float):
+                print('Error: initial_temp must be a number')
+                exit(1)
+            initial_temp = float(initial_temp)
+            if initial_temp <= min_temp:
+                print('Error: initial_temp must be greater than min_temp')
                 exit(1)
 
             k = params['k']
