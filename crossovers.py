@@ -24,11 +24,8 @@ def pair_parents(parents):
 
 class OnePoint:
 
-    def __init__(self, p):
-        self.p = p
-
     def cross(self, parents):
-
+        p = random.randint(0, 5)
         parents = pair_parents(parents)
         # Los parent vienen así [[p1, p2], [p3, p4], ......]
         
@@ -38,7 +35,7 @@ class OnePoint:
             i = 0 
             cgen1 = []
             cgen2 = []
-            while i < self.p:
+            while i < p:
                 cgen1.append(ppair[0].gens[i])
                 cgen2.append(ppair[1].gens[i])
                 i += 1
@@ -55,12 +52,10 @@ class OnePoint:
 
 class TwoPoints:
 
-    def __init__(self, p1, p2):
-        self.p1 = p1
-        self.p2 = p2
-
     def cross(self, parents):
-
+        p1 = random.randint(0, 5)
+        p2 = random.randint(p1, 5)
+        
         parents = pair_parents(parents)
 
         children_gens = []
@@ -69,11 +64,11 @@ class TwoPoints:
             i = 0 
             cgen1 = []
             cgen2 = []
-            while i < self.p1:
+            while i < p1:
                 cgen1.append(ppair[0].gens[i])
                 cgen2.append(ppair[1].gens[i])
                 i += 1
-            while i < self.p2:
+            while i < p2:
                 cgen1.append(ppair[1].gens[i])
                 cgen2.append(ppair[0].gens[i])
                 i += 1
@@ -88,12 +83,12 @@ class TwoPoints:
 
 class Anular: 
 
-    def __init__(self, p, l):
-        self.p = p
+    def __init__(self, l):
         self.l = l
 
     def cross(self, parents):
-
+        p = random.randint(0, 4)
+        
         parents = pair_parents(parents)
         children_gens = []
 
@@ -103,7 +98,7 @@ class Anular:
             cgen2 = []
             size = len(ppair[0].gens)
             while i < size:
-                if (i > self.p and i < self.p+self.l) or (((self.p+self.l) % size < self.p) and i < ((self.p+self.l) % size)): 
+                if (i > p and i < p+self.l) or (((p+self.l) % size < p) and i < ((p+self.l) % size)): 
                     cgen1.append(ppair[1].gens[i])
                     cgen2.append(ppair[0].gens[i])
                 else:
