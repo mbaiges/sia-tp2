@@ -32,54 +32,88 @@ A continuación, se muestra un ejemplo de configuración:
 genetic_operators:
   crossover:
     # all options: one_point, two_points, anular, uniform
-    opt: one_point
+    opt: uniform
     params:
-      # in case of one_point
-      p: 4 
+      # in case of anular (Cruce anular) ("l" is the number of genes to swap)
+      # l must be an integer between [0 - 3] 
+      l: 3 
 
-      # in case of two_points
-      p1: 2
-      p2: 4
-      
-      # in case of anular (Cruce anular)
-      ap: 3
-      l: 3
-
-      # in case of uniform (Cruce uniforme)
-      # up between [0.0 - 1.0]
-      up: 0.5
+      # in case of uniform (Cruce uniforme) ("p" is the probability to swap a gen)
+      # p between [0.0 - 1.0]
+      p: 0.5
 
   mutation:
     # all options: gen, multi_limited, multi_uniform, full 
-    opt: multi_uniform
+    opt: full
     params:
-      # in case of gen (p is the probability to mutate only one gene)\
-      # p between [0.0 - 1.0]
-      p: 0.5
+      # in case of gen (pg is the probability to mutate only one gene)\
+      # pg between [0.0 - 1.0]
+      pg: 0.5
 
-      # in case of multi_limited (p is the probability to mutate [1-M] gens at random [where M is the ammount of gens])
-      # p between [0.0 - 1.0]
-      p: 0.5
+      # in case of multi_limited (pml is the probability to mutate [1-M] gens at random [where M is the ammount of gens])
+      # pml between [0.0 - 1.0]
+      pml: 0.5
       
-      # in case of multi_uniform (p is the probability of each gene to mutate)
-      # p between [0.0 - 1.0]
-      p: 0.5
+      # in case of multi_uniform (pmu is the probability of each gene to mutate)
+      # pmu between [0.0 - 1.0]
+      pmu: 0.5
 
-      # in case of full (p is the probability of mutating all gens or none)
-      # p between [0.0 - 1.0]
-      p: 0.5
+      # in case of full (pf is the probability of mutating all gens or none)
+      # pf between [0.0 - 1.0]
+      pf: 0.5
+
 
 selection:
-  # number of individuals selected each generation
-  K: 140
-  # [0.0-1.0]
-  A: 0.3
-  B: 0.7
+  # K is the number of individuals selected each generation
+  K: 50
+  # A and B must be between [0.0-1.0]
+  A: 0.6
+  B: 0.4
   # all options: elite, roulette, universal, boltzmann, det_tournaments, prob_tournaments, ranking
-  method1: elite
-  method2: ranking
-  method3: roulette
-  method4: universal
+  method1: 
+    opt: elite
+    params:
+      # in case of boltzmann
+      initial_temp: 50 
+      min_temp: 10
+      k: 2
+
+      # in case of probabilistic tournaments
+      # pt_threshold between [0.5 - 1.0]
+      pt_threshold: 0.7
+  method2: 
+    opt: elite
+    params:
+      # in case of boltzmann
+      initial_temp: 50 
+      min_temp: 10
+      k: 2
+    
+      # in case of probabilistic tournaments
+      # pt_threshold between [0.5 - 1.0]
+      pt_threshold: 0.7
+  method3: 
+    opt: elite
+    params:
+      # in case of boltzmann
+      initial_temp: 50 
+      min_temp: 10
+      k: 2
+    
+      # in case of probabilistic tournaments
+      # pt_threshold between [0.5 - 1.0]
+      pt_threshold: 0.7
+  method4: 
+    opt: elite
+    params:
+      # in case of boltzmann
+      initial_temp: 50 
+      min_temp: 10
+      k: 2
+
+      # in case of probabilistic tournaments
+      # pt_threshold between [0.5 - 1.0]
+      pt_threshold: 0.7
 
 implementation: 
   # all options: fill_all, fill_parent
@@ -87,20 +121,29 @@ implementation:
 
 stop:
   # all options: time, gens, acceptable, struct, content
-  opt: time
+  opt: struct
   params:
     # in case of time, declared in seconds
-    max_time: 30
+    max_time: 10
 
     # in case of gens
-    max_generation: 30
+    max_generation: 100
 
     # in case of acceptable
     mean_acceptable_fitness: 100
 
-# path to tsv file containing all items info
+    # in case of struct
+    # relevant_percentage_of_change must be between [0.0 - 1.0]
+    relevant_percentage_of_change: 0.7
+    considered_gens: 15
+
+    # in case of content
+    max_generations_counter: 5
+
+
+# path to tsv dile conataining all items info
 items_dataset: 
-  path: allitems
+  path: allitems_test
   weapons_filename: armas.tsv
   boots_filename: botas.tsv
   helmets_filename: cascos.tsv
@@ -108,10 +151,17 @@ items_dataset:
   breastplates_filename: pecheras.tsv
 
 # all options: warrior, archer, defender, infiltrate
-character_class: warrior
+character_class: infiltrate
 
 # natural number greater than zero
-initial_population: 160
+initial_population: 100
+
+# to run multiple iterations
+multiple_times:
+  run: True
+  iterations: 40
+
+
 ```
 
 ### Ejecución
