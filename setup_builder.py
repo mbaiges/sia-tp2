@@ -193,85 +193,47 @@ def get_setup(config):
         print(f'Error: Crossover method "{config.crossover}" does not exist')
         exit(1)
 
-    ## they all need params
-    crossover_params = config.crossover_params
+    ## if need params
+    if config.crossover == 'anular' or config.crossover == 'uniform':
 
-    if crossover_params is None:
-        print("Error: Crossover params missing")
-        exit(1)
+        crossover_params = config.crossover_params
+        if crossover_params is None:
+            print("Error: Crossover params missing")
+            exit(1)
 
-    if config.crossover == 'one_point':
-        p = crossover_params['p']
-        if p is None:
-            print("Error: Missing p param at crossover")
-            exit(1)
-        elif not type(p) == int:
-            print('Error: p must be an integer')
-            exit(1)
-        p = int(p)
-        if p < 0 or p > 5:
-            print('Error: p must be in range [0 - 5]')
-            exit(1)
-        crossover = crossover(p)
-    elif config.crossover == 'two_points':
-        p1 = crossover_params['p1']
-        p2 = crossover_params['p2']
-        
-        if p1 is None:
-            print("Error: Missing p1 param at crossover")
-            exit(1)
-        elif p2 is None:
-            print("Error: Missing p2 param at crossover")
-            exit(1)
-        elif not type(p1) == int or not type(p2) == int:
-            print('Error: p1 and p2 must be integers')
-            exit(1)
-        p1 = int(p1)
-        p2 = int(p2)
-        if p1 < 0 or p1 > 5 or p2 < 0 or p2 > 5:
-            print('Error: p1 and p2 must be both in range [0 - 5]')
-            exit(1)
-        elif p2 < p1:
-            print('Error: p2 must be smaller than p1')
-            exit(1)
-        crossover = crossover(p1,p2)
-    
-    elif config.crossover == 'anular':
-        ap = crossover_params['ap']
-        l = crossover_params['l']
-        
-        if ap is None:
-            print("Error: Missing ap param at crossover")
-            exit(1)
-        elif l is None:
-            print("Error: Missing l param at crossover")
-            exit(1)
-        elif not type(ap) == int or not type(l) == int:
-            print('Error: ap and l must be integers')
-            exit(1)
-        ap = int(ap)
-        l = int(l)
-        if ap < 0 or ap > 5 or l < 0 or l > 3: #Pide que L e [0, Techo(S/2)]
-            print('Error: ap and l must be both in range [0 - 5]')
-            exit(1)
-        
-        crossover = crossover(ap,l)
+        elif config.crossover == 'anular':
+            l = crossover_params['l']
+            
+            if l is None:
+                print("Error: Missing l param at crossover")
+                exit(1)
+            elif not type(l) == int:
+                print('Error: l must be integer')
+                exit(1)
+            l = int(l)
+            if l < 0 or l > 3: #Pide que L e [0, Techo(S/2)]
+                print('Error: l must be in range [0 - 3]')
+                exit(1)
+            
+            crossover = crossover(l)
 
-    elif config.crossover == 'uniform':
-        up = crossover_params['up']
-        
-        if up is None:
-            print("Error: Missing up param at crossover")
-            exit(1)
-        elif not (type(up) == int or type(up) == float):
-            print('Error: up must be an integer or a float')
-            exit(1)
-        up = float(up)
-        if up < 0 or up > 1:
-            print('Error: up must be in range [0 - 1]')
-            exit(1)
-        
-        crossover = crossover(up)
+        elif config.crossover == 'uniform':
+            p = crossover_params['p']
+            
+            if p is None:
+                print("Error: Missing p param at crossover")
+                exit(1)
+            elif not (type(p) == int or type(p) == float):
+                print('Error: p must be an integer or a float')
+                exit(1)
+            p = float(p)
+            if p < 0 or p > 1:
+                print('Error: p must be in range [0 - 1]')
+                exit(1)
+            
+            crossover = crossover(p)
+    else:
+        crossover = crossover()
 
     ## Mutation ---------------------------------------------------------------------------------
 
@@ -462,4 +424,21 @@ def get_setup(config):
     all_items = read_all_items(config.items_dataset_path, config.items_dataset_filenames)
     print("Items loaded")
 
-    return Setup(all_items, crossover, mutation, K, A, B, method1, method2, method3, method4, implementation, stop, character_class_constructor, initial_population)
+    # Multiple times
+
+    multiple_times = config.multiple_times
+    multiple_times_iterations = config.multiple_times_iterations
+
+    if multiple_times:
+        if multiple_times_iterations is None:
+            print("Error: Missing iterations param at multiple_times")
+            exit(1)
+        elif not (type(multiple_times_iterations) == int ) :
+            print('Error: iterations must be an integer')
+            exit(1)
+        multiple_times_iterations = int(multiple_times_iterations)
+        if multiple_times_iterations < 0:
+            print('Error: iterations must be greater than 0')
+            exit(1)
+
+    return Setup(all_items, crossover, mutation, K, A, B, method1, method2, method3, method4, implementation, stop, character_class_constructor, initial_population, multiple_times, multiple_times_iterations)

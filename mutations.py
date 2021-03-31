@@ -69,9 +69,10 @@ class MultigenLimitada:
         for gene in genes:
             mutation_chance = random.uniform(0, 1)
             if mutation_chance < self.p:
-                genes_ammount = len(gene)
-                ammount_of_genes_to_mutate = random.randint(1,genes_ammount)
-                rand_indexes = np.random.randint(0,genes_ammount-1,ammount_of_genes_to_mutate)
+                genes_amount = len(gene)
+                amount_of_genes_to_mutate = random.randint(1,genes_amount)
+                #rand_indexes = [random.randint(0, genes_amount-1) for a in range(0, amount_of_genes_to_mutate)]
+                rand_indexes = np.random.randint(0,genes_amount-1,amount_of_genes_to_mutate)
                 for i in rand_indexes:
                     gene[i] = mutate_gen(i, setup.all_items)
 

@@ -1,3 +1,5 @@
 pyyaml
 matplotlib
 numpy
+keyboard
+PyQt5

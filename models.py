@@ -14,7 +14,7 @@ class ItemsFilenames:
 class Config:
 
     def __init__(self
-        , crossover, crossover_params, mutation, mutation_params, K, A, B, method1, method1_params, method2, method2_params, method3, method3_params, method4, method4_params, implementation, stop, stop_params, items_dataset_path, weapons_filename, boots_filename, helmets_filename, gloves_filename, breastplates_filename, character_class, initial_population):
+        , crossover, crossover_params, mutation, mutation_params, K, A, B, method1, method1_params, method2, method2_params, method3, method3_params, method4, method4_params, implementation, stop, stop_params, items_dataset_path, weapons_filename, boots_filename, helmets_filename, gloves_filename, breastplates_filename, character_class, initial_population, multiple_times, multiple_times_iterations):
         self.crossover = crossover
         self.crossover_params = crossover_params
         self.mutation = mutation
@@ -37,6 +37,8 @@ class Config:
         self.items_dataset_filenames = ItemsFilenames(weapons_filename, boots_filename, helmets_filename, gloves_filename, breastplates_filename)
         self.character_class = character_class
         self.initial_population = initial_population
+        self.multiple_times = multiple_times
+        self.multiple_times_iterations = multiple_times_iterations
 
     def __str__(self):
         s = 'Config:\n'
@@ -67,7 +69,10 @@ class Config:
         s += f'\t\tgloves: {self.items_dataset_filenames.gloves}\n'
         s += f'\t\tbreastplates: {self.items_dataset_filenames.breastplates}\n'
         s += f'\tcharacter_class: {self.character_class}\n'
-        s += f'\tinitial_population: {self.initial_population}'
+        s += f'\tinitial_population: {self.initial_population}\n'
+        s += f'\tmultiple_times:\n'
+        s += f'\t\trun: {self.multiple_times}\n'
+        s += f'\t\titerations: {self.multiple_times_iterations}'
         return s
 
 class Item:
@@ -231,7 +236,7 @@ class Infiltrate(Character):
 
 class Setup:
 
-    def __init__(self, all_items, crossover, mutation, K, A, B, method1, method2, method3, method4, implementation, stop, character_class_constructor, initial_population):
+    def __init__(self, all_items, crossover, mutation, K, A, B, method1, method2, method3, method4, implementation, stop, character_class_constructor, initial_population, multiple_times, multiple_times_iterations):
         self.all_items = all_items
         self.crossover = crossover
         self.mutation = mutation
@@ -246,6 +251,8 @@ class Setup:
         self.stop = stop
         self.character_class_constructor = character_class_constructor
         self.initial_population = initial_population
+        self.multiple_times = multiple_times
+        self.multiple_times_iterations = multiple_times_iterations
 
 class Generation:
 

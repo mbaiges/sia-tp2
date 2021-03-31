@@ -3,38 +3,30 @@ genetic_operators:
     # all options: one_point, two_points, anular, uniform
     opt: uniform
     params:
-      # in case of one_point
-      p: 4 
-
-      # in case of two_points
-      p1: 2
-      p2: 4
-      
       # in case of anular (Cruce anular)
-      ap: 3
       l: 3
 
       # in case of uniform (Cruce uniforme)
-      # up between [0.0 - 1.0]
-      up: 0.5
+      # p between [0.0 - 1.0]
+      p: 0.5
 
   mutation:
     # all options: gen, multi_limited, multi_uniform, full 
     opt: full
     params:
-      # in case of gen (p is the probability to mutate only one gene)\
+      # in case of gen (pg is the probability to mutate only one gene)\
       # p between [0.0 - 1.0]
       pg: 0.5
 
-      # in case of multi_limited (p is the probability to mutate [1-M] gens at random [where M is the ammount of gens])
+      # in case of multi_limited (pml is the probability to mutate [1-M] gens at random [where M is the ammount of gens])
       # p between [0.0 - 1.0]
       pml: 0.5
       
-      # in case of multi_uniform (p is the probability of each gene to mutate)
+      # in case of multi_uniform (pmu is the probability of each gene to mutate)
       # p between [0.0 - 1.0]
       pmu: 0.5
 
-      # in case of full (p is the probability of mutating all gens or none)
+      # in case of full (pf is the probability of mutating all gens or none)
       # p between [0.0 - 1.0]
       pf: 0.5
 
@@ -64,7 +56,7 @@ selection:
       initial_temp: 50 
       min_temp: 10
       k: 2
-
+    
       # in case of probabilistic tournaments
       # pt_threshold between [0.5 - 1.0]
       pt_threshold: 0.7
@@ -75,7 +67,7 @@ selection:
       initial_temp: 50 
       min_temp: 10
       k: 2
-
+    
       # in case of probabilistic tournaments
       # pt_threshold between [0.5 - 1.0]
       pt_threshold: 0.7
@@ -97,7 +89,7 @@ implementation:
 
 stop:
   # all options: time, gens, acceptable, struct, content
-  opt: struct
+  opt: gens
   params:
     # in case of time, declared in seconds
     max_time: 10
@@ -118,7 +110,7 @@ stop:
 
 # path to tsv dile conataining all items info
 items_dataset: 
-  path: allitems_test
+  path: allitems
   weapons_filename: armas.tsv
   boots_filename: botas.tsv
   helmets_filename: cascos.tsv
@@ -130,3 +122,9 @@ character_class: infiltrate
 
 # natural number greater than zero
 initial_population: 100
+
+# to run multiple iterations
+multiple_times:
+  run: True
+  iterations: 40
+

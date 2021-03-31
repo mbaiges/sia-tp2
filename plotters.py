@@ -203,3 +203,31 @@ def plot_best_ind_stats(q):
     plt.show()
 
     return
+
+
+
+def plot_data(matrix, avg_array):
+
+    for i in range(0, len(matrix)):
+        plt.plot(matrix[i], color='#2efff8', linestyle='solid')
+    
+    plt.plot(avg_array, "k-")
+
+    plt.show()
+
+    return
+
+def plot_all_data(max_fitness_matrix, mean_fitness_matrix, min_fitness_matrix, avg_max_fitness, avg_mean_fitness, avg_min_fitness):
+    
+    for i in range(0, len(max_fitness_matrix)):
+        plt.plot(max_fitness_matrix[i], color='#f59c95', linestyle='solid')
+        plt.plot(mean_fitness_matrix[i], color='#bcf5b3', linestyle='solid')
+        plt.plot(min_fitness_matrix[i], color='#b5e0ff', linestyle='solid')
+    
+    plt.plot(avg_max_fitness, "r-")
+    plt.plot(avg_mean_fitness, "g-")
+    plt.plot(avg_min_fitness, "b-")
+
+    plt.show()
+
+    return

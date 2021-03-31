@@ -6,7 +6,8 @@ import keyboard
 from utils import read_config
 from setup_builder import get_setup
 from generators import get_initial_population
-from plotters import plot_min_and_mean_fitness, plot_genetic_diversity, plot_best_ind_stats
+from plotters import plot_min_and_mean_fitness, plot_genetic_diversity, plot_best_ind_stats, plot_data, plot_all_data
+from stops import Generations
 
 from models import Generation
 
@@ -28,56 +29,21 @@ def get_children(genes, char_gen):
 def sigint_handler(sig, frame):
     print('Exiting')
 
-    global fitness_plotter, diversity_plotter, best_ind_stats_plotter
+    # global fitness_plotter, diversity_plotter, best_ind_stats_plotter
 
-    if not fitness_plotter is None:
-        fitness_plotter.terminate()
+    # if not fitness_plotter is None:
+    #     fitness_plotter.terminate()
 
-    if not diversity_plotter is None:
-        diversity_plotter.terminate()
+    # if not diversity_plotter is None:
+    #     diversity_plotter.terminate()
 
-    if not best_ind_stats_plotter is None:
-        best_ind_stats_plotter.terminate()
+    # if not best_ind_stats_plotter is None:
+    #     best_ind_stats_plotter.terminate()
 
     sys.exit(0)
 
-if __name__ == '__main__':
-    # sets SIGINT handler
-    signal.signal(signal.SIGINT, sigint_handler)
-   
-    # sets process creation method
-    mp.set_start_method('spawn')
-
-    config = read_config()
-
-    print(config)
-
-    setup = get_setup(config)
-    stop = setup.stop
-
-    # https://docs.python.org/es/3.9/library/multiprocessing.html
-    # multiprocessing
-
-    fitness_plotter_q = mp.Queue()
-    fitness_plotter_q.cancel_join_thread()
-    diversity_plotter_q = mp.Queue()
-    diversity_plotter_q.cancel_join_thread()
-    best_ind_stats_plotter_q = mp.Queue()
-    best_ind_stats_plotter_q.cancel_join_thread()
-
-    fitness_plotter = mp.Process(target=plot_min_and_mean_fitness, args=((fitness_plotter_q),))
-    fitness_plotter.daemon = True
-    fitness_plotter.start()
-
-    diversity_plotter = mp.Process(target=plot_genetic_diversity, args=((diversity_plotter_q),))
-    diversity_plotter.daemon = True
-    diversity_plotter.start()
-
-    best_ind_stats_plotter = mp.Process(target=plot_best_ind_stats, args=((best_ind_stats_plotter_q),))
-    best_ind_stats_plotter.daemon = True
-    best_ind_stats_plotter.start()
-
-    # # starts processing
+def iterate(setup, multiple_times):
+    generations = []
 
     initial_population = setup.initial_population
 
@@ -101,23 +67,26 @@ if __name__ == '__main__':
     stop.ready()
 
     while not stop.reached_end(gen):
-        fitness_plotter_q.put(gen)
-        diversity_plotter_q.put(gen)
-        best_ind_stats_plotter_q.put(gen)
+        generations.append(gen)
 
-        if config.stop == 'gens':
-            max_gens = config.stop_params['max_generation']
-            if gen_n % int(max_gens* print_rate_pctg) == 0:
-                print_percentage = int(100*gen_n/max_gens)
-                barr = '['
-                for i in range(0, int(print_percentage*print_rate_pctg)):
-                    barr += '#'
-                for i in range(int(print_percentage*print_rate_pctg), int(100*print_rate_pctg)):
-                    barr += ' '
-                barr += ']'
-                print(f'Iteration {gen_n}/{max_gens}: \t {barr} ({print_percentage}%)')
-        elif gen_n % print_rate == 0:
-            print("Iteration: ", gen_n)
+        if not multiple_times:
+            fitness_plotter_q.put(gen)
+            diversity_plotter_q.put(gen)
+            best_ind_stats_plotter_q.put(gen)
+
+            if config.stop == 'gens':
+                max_gens = config.stop_params['max_generation']
+                if gen_n % int(max_gens* print_rate_pctg) == 0:
+                    print_percentage = int(100*gen_n/max_gens)
+                    barr = '['
+                    for i in range(0, int(print_percentage*print_rate_pctg)):
+                        barr += '#'
+                    for i in range(int(print_percentage*print_rate_pctg), int(100*print_rate_pctg)):
+                        barr += ' '
+                    barr += ']'
+                    print(f'Iteration {gen_n}/{max_gens}: \t {barr} ({print_percentage}%)')
+            elif gen_n % print_rate == 0:
+                print("Iteration: ", gen_n)
         
         # select parents
         parents = select_A(gen.individuals, gen_n, setup.K)
@@ -137,19 +106,128 @@ if __name__ == '__main__':
         gen_n += 1
         gen = Generation(new_individuals, gen_n)
 
-    fitness_plotter_q.put("STOP")
-    diversity_plotter_q.put("STOP")
-    best_ind_stats_plotter_q.put("STOP")
+    return generations
 
-    print("Min fitness: ", gen.min_fitness())
-    print("Mean fitness: ", gen.mean_fitness())
-    print("Max fitness: ", gen.max_fitness())
+
+def parse_results(setup, iterations):
+    max_fitness_matrix = []
+    avg_max_fitness = []
+    mean_fitness_matrix = []
+    avg_mean_fitness = []
+    min_fitness_matrix = []
+    avg_min_fitness = []
+
+    iteration_amnt = len(iterations)
+    gen_size = len(iterations[0])
+
+    for i in range(0, iteration_amnt):
+        max_fitness_matrix.append([])
+        mean_fitness_matrix.append([])
+        min_fitness_matrix.append([])
+        
+        for g in range(0, gen_size):           
+            max_fitness_matrix[i].append(iterations[i][g].max_fitness())
+            mean_fitness_matrix[i].append(iterations[i][g].mean_fitness())
+            min_fitness_matrix[i].append(iterations[i][g].min_fitness())
+
+    for g in range(0, gen_size) : 
+        avg_max_fitness.append(0) 
+        avg_mean_fitness.append(0) 
+        avg_min_fitness.append(0)
+        for i in range(0, iteration_amnt):
+            avg_max_fitness[g] += max_fitness_matrix[i][g]
+            avg_mean_fitness[g] += mean_fitness_matrix[i][g]
+            avg_min_fitness[g] += min_fitness_matrix[i][g]
+        avg_max_fitness[g] = avg_max_fitness[g] / iteration_amnt
+        avg_mean_fitness[g] = avg_mean_fitness[g] / iteration_amnt 
+        avg_min_fitness[g] = avg_min_fitness[g] / iteration_amnt 
+
+    plot_data(max_fitness_matrix, avg_max_fitness)
+    plot_data(mean_fitness_matrix, avg_mean_fitness)
+    plot_data(min_fitness_matrix, avg_min_fitness)
+
+    plot_all_data(max_fitness_matrix, mean_fitness_matrix, min_fitness_matrix, avg_max_fitness, avg_mean_fitness, avg_min_fitness)
+
+    return
+
+if __name__ == '__main__':
+    # sets SIGINT handler
+    signal.signal(signal.SIGINT, sigint_handler)
+   
+    # sets process creation method
+    mp.set_start_method('spawn')
+
+    config = read_config()
+
+    print(config)
+
+
+    setup = get_setup(config)
+    stop = setup.stop
+
+    multiple_times = setup.multiple_times
+
+    if not multiple_times:
+
+        # https://docs.python.org/es/3.9/library/multiprocessing.html
+        # multiprocessing
+    
+        fitness_plotter_q = mp.Queue()
+        fitness_plotter_q.cancel_join_thread()
+        diversity_plotter_q = mp.Queue()
+        diversity_plotter_q.cancel_join_thread()
+        best_ind_stats_plotter_q = mp.Queue()
+        best_ind_stats_plotter_q.cancel_join_thread()
+    
+        fitness_plotter = mp.Process(target=plot_min_and_mean_fitness, args=((fitness_plotter_q),))
+        fitness_plotter.daemon = True
+        fitness_plotter.start()
+    
+        diversity_plotter = mp.Process(target=plot_genetic_diversity, args=((diversity_plotter_q),))
+        diversity_plotter.daemon = True
+        diversity_plotter.start()
+    
+        best_ind_stats_plotter = mp.Process(target=plot_best_ind_stats, args=((best_ind_stats_plotter_q),))
+        best_ind_stats_plotter.daemon = True
+        best_ind_stats_plotter.start()
+
+        # # starts processing
+
+        gens = iterate(setup, False)
+
+        gen = gens[-1]
+
+        fitness_plotter_q.put("STOP")
+        diversity_plotter_q.put("STOP")
+        best_ind_stats_plotter_q.put("STOP")
+
+        print("Min fitness: ", gen.min_fitness())
+        print("Mean fitness: ", gen.mean_fitness())
+        print("Max fitness: ", gen.max_fitness()) 
+
+    else:
+
+        if not isinstance(setup.stop, Generations):
+            print(setup.stop)
+            print("Error: multiple times run is only available using stop: 'gens'")
+            exit(1)
+
+        iterations = []
+        n = setup.multiple_times_iterations
+        
+        for i in range(0, n):
+            iterations.append(iterate(setup, True))
+            print(f"finished iteration {i}")
+
+        print(f"parsing results...")
+        parse_results(setup, iterations)
 
     print("End reached")
 
     print("Press 'q' to finish")
 
     keyboard.wait("q")
+
 
     # fitness_plotter.terminate()
     # diversity_plotter.terminate()
@@ -158,3 +236,6 @@ if __name__ == '__main__':
     print("Exiting")
 
     exit(0)
+
+
+
