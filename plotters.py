@@ -204,9 +204,7 @@ def plot_best_ind_stats(q):
 
     return
 
-
-
-def plot_data(matrix, avg_array, title):
+def plot_iterations_fitness(matrix, avg_array, title):
 
     print(f"Generating graph '{title}'")
 
@@ -223,22 +221,45 @@ def plot_data(matrix, avg_array, title):
 
     return
 
-def plot_all_data(max_fitness_matrix, mean_fitness_matrix, min_fitness_matrix, avg_max_fitness, avg_mean_fitness, avg_min_fitness, title):
+def plot_all_iterations_fitnesses(max_fitness_matrix, mean_fitness_matrix, min_fitness_matrix, avg_max_fitness, avg_mean_fitness, avg_min_fitness, title):
     
     print(f"Generating graph '{title}'")
     
+    fig = plt.figure()
+    #creating a subplot 
+    ax1 = fig.add_subplot(1,1,1)
+
     plt.xlabel("Generation")
     plt.ylabel("Fitness")
     plt.title(title)
     
     for i in range(0, len(max_fitness_matrix)):
-        plt.plot(max_fitness_matrix[i], color='#f59c95', linestyle='solid')
-        plt.plot(mean_fitness_matrix[i], color='#bcf5b3', linestyle='solid')
-        plt.plot(min_fitness_matrix[i], color='#b5e0ff', linestyle='solid')
+        ax1.plot(max_fitness_matrix[i], color='#f59c95', linestyle='solid')
+        ax1.plot(mean_fitness_matrix[i], color='#bcf5b3', linestyle='solid')
+        ax1.plot(min_fitness_matrix[i], color='#b5e0ff', linestyle='solid')
     
-    plt.plot(avg_max_fitness, "r-")
-    plt.plot(avg_mean_fitness, "g-")
-    plt.plot(avg_min_fitness, "b-")
+    l1, = ax1.plot(avg_max_fitness, "r-")
+    l2, = ax1.plot(avg_mean_fitness, "g-")
+    l3, = ax1.plot(avg_min_fitness, "b-")
+
+    plt.legend([l1, l2, l3],["Maximum Fitness", "Mean Fitness", "Minimum Fitness"])
+
+    plt.show()
+
+    return
+
+def plot_iterations_diversities(matrix, avg_array, title):
+
+    print(f"Generating graph '{title}'")
+
+    plt.xlabel("Generation")
+    plt.ylabel("Genetic diversity")
+    plt.title(title)
+
+    for i in range(0, len(matrix)):
+        plt.plot(matrix[i], color='#FFAA39', linestyle='solid')
+    
+    plt.plot(avg_array, "k-")
 
     plt.show()
 

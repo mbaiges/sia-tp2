@@ -6,7 +6,7 @@ import keyboard
 from utils import read_config
 from setup_builder import get_setup
 from generators import get_initial_population
-from plotters import plot_min_and_mean_fitness, plot_genetic_diversity, plot_best_ind_stats, plot_data, plot_all_data
+from plotters import plot_min_and_mean_fitness, plot_genetic_diversity, plot_best_ind_stats, plot_iterations_fitness, plot_all_iterations_fitnesses, plot_iterations_diversities
 from stops import Generations
 
 from models import Generation
@@ -29,16 +29,16 @@ def get_children(genes, char_gen):
 def sigint_handler(sig, frame):
     print('Exiting')
 
-    # global fitness_plotter, diversity_plotter, best_ind_stats_plotter
+    global fitness_plotter, diversity_plotter, best_ind_stats_plotter
 
-    # if not fitness_plotter is None:
-    #     fitness_plotter.terminate()
+    if not fitness_plotter is None:
+        fitness_plotter.terminate()
 
-    # if not diversity_plotter is None:
-    #     diversity_plotter.terminate()
+    if not diversity_plotter is None:
+        diversity_plotter.terminate()
 
-    # if not best_ind_stats_plotter is None:
-    #     best_ind_stats_plotter.terminate()
+    if not best_ind_stats_plotter is None:
+        best_ind_stats_plotter.terminate()
 
     sys.exit(0)
 
@@ -116,6 +116,8 @@ def parse_results(setup, iterations):
     avg_mean_fitness = []
     min_fitness_matrix = []
     avg_min_fitness = []
+    diversity_matrix = []
+    avg_diversity = []
 
     iteration_amnt = len(iterations)
     gen_size = len(iterations[0])
@@ -124,29 +126,36 @@ def parse_results(setup, iterations):
         max_fitness_matrix.append([])
         mean_fitness_matrix.append([])
         min_fitness_matrix.append([])
+        diversity_matrix.append([])
         
         for g in range(0, gen_size):           
             max_fitness_matrix[i].append(iterations[i][g].max_fitness())
             mean_fitness_matrix[i].append(iterations[i][g].mean_fitness())
             min_fitness_matrix[i].append(iterations[i][g].min_fitness())
+            diversity_matrix[i].append(sum(iterations[i][g].genetic_diversity().values()))
 
     for g in range(0, gen_size) : 
         avg_max_fitness.append(0) 
         avg_mean_fitness.append(0) 
         avg_min_fitness.append(0)
+        avg_diversity.append(0)
         for i in range(0, iteration_amnt):
             avg_max_fitness[g] += max_fitness_matrix[i][g]
             avg_mean_fitness[g] += mean_fitness_matrix[i][g]
             avg_min_fitness[g] += min_fitness_matrix[i][g]
-        avg_max_fitness[g] = avg_max_fitness[g] / iteration_amnt
-        avg_mean_fitness[g] = avg_mean_fitness[g] / iteration_amnt 
-        avg_min_fitness[g] = avg_min_fitness[g] / iteration_amnt 
+            avg_diversity[g] += diversity_matrix[i][g]
+        avg_max_fitness[g] /= iteration_amnt
+        avg_mean_fitness[g] /= iteration_amnt 
+        avg_min_fitness[g] /= iteration_amnt 
+        avg_diversity[g] /= iteration_amnt
 
-    plot_data(max_fitness_matrix, avg_max_fitness, f"Max fitnesses over {iteration_amnt} iterations and avg")
-    plot_data(mean_fitness_matrix, avg_mean_fitness, f"Mean fitnesses over {iteration_amnt} iterations and avg")
-    plot_data(min_fitness_matrix, avg_min_fitness, f"Min fitnesses over {iteration_amnt} iterations and avg")
+    plot_iterations_fitness(max_fitness_matrix, avg_max_fitness, f"Max fitnesses over {iteration_amnt} iterations and avg")
+    plot_iterations_fitness(mean_fitness_matrix, avg_mean_fitness, f"Mean fitnesses over {iteration_amnt} iterations and avg")
+    plot_iterations_fitness(min_fitness_matrix, avg_min_fitness, f"Min fitnesses over {iteration_amnt} iterations and avg")
 
-    plot_all_data(max_fitness_matrix, mean_fitness_matrix, min_fitness_matrix, avg_max_fitness, avg_mean_fitness, avg_min_fitness, f"Max/Mean/Min fitnesses over {iteration_amnt} iterations and avg")
+    plot_all_iterations_fitnesses(max_fitness_matrix, mean_fitness_matrix, min_fitness_matrix, avg_max_fitness, avg_mean_fitness, avg_min_fitness, f"Max/Mean/Min fitnesses over {iteration_amnt} iterations and avg")
+
+    plot_iterations_diversities(diversity_matrix, avg_diversity, f"Genetic diversity over {iteration_amnt} iterations and avg")
 
     return
 
