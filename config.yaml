@@ -3,81 +3,86 @@ genetic_operators:
     # all options: one_point, two_points, anular, uniform
     opt: uniform
     params:
-      # in case of anular (Cruce anular)
-      l: 3
+      # in case of anular (Cruce anular) ("l" is the number of genes to swap)
+      # l must be an integer between [0 - 3] 
+      l: 3 
 
-      # in case of uniform (Cruce uniforme)
+      # in case of uniform (Cruce uniforme) ("p" is the probability to swap a gen)
       # p between [0.0 - 1.0]
       p: 0.5
 
   mutation:
     # all options: gen, multi_limited, multi_uniform, full 
-    opt: multi_uniform
+    opt: full
     params:
-      # in case of gen (pg is the probability to mutate only one gene)\
-      # p between [0.0 - 1.0]
+      # in case of gen (pg is the probability to mutate only one gene)
+      # pg between [0.0 - 1.0]
       pg: 0.5
 
       # in case of multi_limited (pml is the probability to mutate [1-M] gens at random [where M is the ammount of gens])
-      # p between [0.0 - 1.0]
+      # pml between [0.0 - 1.0]
       pml: 0.5
       
       # in case of multi_uniform (pmu is the probability of each gene to mutate)
-      # p between [0.0 - 1.0]
+      # pmu between [0.0 - 1.0]
       pmu: 0.5
 
       # in case of full (pf is the probability of mutating all gens or none)
-      # p between [0.0 - 1.0]
+      # pf between [0.0 - 1.0]
       pf: 0.5
 
 
 selection:
-  # number of individuals selected each generation
-  K: 100
-  # [0.0-1.0]
+  # K is the number of individuals selected each generation
+  K: 50
+  # A and B must be between [0.0-1.0]
   A: 0.6
-  B: 0.6
+  B: 0.4
   # all options: elite, roulette, universal, boltzmann, det_tournaments, prob_tournaments, ranking
   method1: 
     opt: elite
     params:
       # in case of boltzmann
       initial_temp: 50 
-      min_temp: 1
+      min_temp: 10
       k: 2
+
       # in case of probabilistic tournaments
       # pt_threshold between [0.5 - 1.0]
-      pt_threshold: 0.8
+      pt_threshold: 0.7
   method2: 
-    opt: ranking
+    opt: elite
     params:
       # in case of boltzmann
       initial_temp: 50 
-      min_temp: 1
+      min_temp: 10
       k: 2
+    
       # in case of probabilistic tournaments
       # pt_threshold between [0.5 - 1.0]
-      pt_threshold: 0.8
+      pt_threshold: 0.7
   method3: 
     opt: elite
     params:
       # in case of boltzmann
       initial_temp: 50 
-      min_temp: 1
+      min_temp: 10
       k: 2
+    
       # in case of probabilistic tournaments
       # pt_threshold between [0.5 - 1.0]
-      pt_threshold: 0.8
+      pt_threshold: 0.7
   method4: 
-    opt: ranking
+    opt: elite
     params:
       # in case of boltzmann
       initial_temp: 50 
-      min_temp: 1
+      min_temp: 10
       k: 2
+
       # in case of probabilistic tournaments
       # pt_threshold between [0.5 - 1.0]
-      pt_threshold: 0.8
+      pt_threshold: 0.7
 
 implementation: 
   # all options: fill_all, fill_parent
@@ -97,6 +102,7 @@ stop:
     mean_acceptable_fitness: 100
 
     # in case of struct
+    # relevant_percentage_of_change must be between [0.0 - 1.0]
     relevant_percentage_of_change: 0.7
     considered_gens: 15
 
@@ -117,10 +123,9 @@ items_dataset:
 character_class: infiltrate
 
 # natural number greater than zero
-initial_population: 200
+initial_population: 100
 
-# to run multiple iterations
+# to run multiple iterations 
 multiple_times:
-  run: True
+  run: False  #requires boolean True or False
   iterations: 40
-
