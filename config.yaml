@@ -13,7 +13,7 @@ genetic_operators:
 
   mutation:
     # all options: gen, multi_limited, multi_uniform, full 
-    opt: full
+    opt: multi_uniform
     params:
       # in case of gen (pg is the probability to mutate only one gene)
       # pg between [0.0 - 1.0]
@@ -34,7 +34,7 @@ genetic_operators:
 
 selection:
   # K is the number of individuals selected each generation
-  K: 50
+  K: 100
   # A and B must be between [0.0-1.0]
   A: 0.6
   B: 0.4
@@ -120,10 +120,10 @@ items_dataset:
   breastplates_filename: pecheras.tsv
 
 # all options: warrior, archer, defender, infiltrate
-character_class: infiltrate
+character_class: warrior
 
 # natural number greater than zero
-initial_population: 100
+initial_population: 200
 
 # to run multiple iterations 
 multiple_times:

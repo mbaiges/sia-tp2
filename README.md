@@ -174,7 +174,7 @@ En cada grafico se muestra tambien el promedio de cada una de estas para poder o
 De estar ```multiple_times``` **desactivado** se mostrarán graficos a tiempo real de:
 * Maximo, media y minimo fitness de la poblacion
 * Diversidad genetica para cada uno de los genes de la población
-* La vida, fuerza, resistencia, habilidad y agilidad para el individuo con mayor fitness
+* La vida, fuerza, resistencia, pericia y agilidad para el individuo con mayor fitness
 * El ataque y la defensa para el individuo con mayor fitness
 
 ### Ejecución
