@@ -160,8 +160,6 @@ initial_population: 100
 multiple_times:
   run: False  #requires boolean True or False
   iterations: 40
-
-
 ```
 El parametro ```multiple_times``` indica si se desea correr esta configuración de los algoritmos para multiples iteraciones de poblaciones. De estar **activado**, el programa mostrará los graficos de los siguientes elementos para cada poblacion en cada numero de generación: 
 * El maximo 
