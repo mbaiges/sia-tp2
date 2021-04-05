@@ -110,7 +110,7 @@ stop:
     max_generations_counter: 5
 
 
-# path to tsv dile conataining all items info
+# path to tsv file containing all items info
 items_dataset: 
   path: allitems
   weapons_filename: armas.tsv

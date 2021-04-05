@@ -26,6 +26,11 @@ Antes de ejecutar el programa, se establece un archivo de configuración bajo el
 
 En este archivo se configuran todos los parametros de ejecución del programa, así como la ubicación de los datos de los items.
 
+La carpeta donde se ubican los items debe tener la siguiente estructura: ubicada en la carpeta principal del trabajo.
+Por otra parte, los nombres de esta carpeta y sus archivos tsv son parametrizables en el archivo de configuración.
+
+![folders items structure](https://i.ibb.co/t4YCN6F/structure.png)
+
 A continuación, se muestra un ejemplo de configuración:
 
 ```yaml
@@ -141,7 +146,7 @@ stop:
     max_generations_counter: 5
 
 
-# path to tsv dile conataining all items info
+# path to tsv file containing all items info
 items_dataset: 
   path: allitems_test
   weapons_filename: armas.tsv
@@ -161,6 +166,7 @@ multiple_times:
   run: False  #requires boolean True or False
   iterations: 40
 ```
+
 El parametro ```multiple_times``` indica si se desea correr esta configuración de los algoritmos para multiples iteraciones de poblaciones. De estar **activado**, el programa mostrará los graficos de los siguientes elementos para cada poblacion en cada numero de generación: 
 * El maximo 
 * La media 
