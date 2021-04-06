@@ -49,9 +49,9 @@ genetic_operators:
 
   mutation:
     # all options: gen, multi_limited, multi_uniform, full 
-    opt: full
+    opt: multi_uniform
     params:
-      # in case of gen (pg is the probability to mutate only one gene)\
+      # in case of gen (pg is the probability to mutate only one gene)
       # pg between [0.0 - 1.0]
       pg: 0.5
 
@@ -70,7 +70,7 @@ genetic_operators:
 
 selection:
   # K is the number of individuals selected each generation
-  K: 50
+  K: 100
   # A and B must be between [0.0-1.0]
   A: 0.6
   B: 0.4
@@ -83,6 +83,10 @@ selection:
       min_temp: 10
       k: 2
 
+      # in case of deterministic tournaments
+      # m between [1 - INITIAL_POPULATION-1]
+      m: 5
+
       # in case of probabilistic tournaments
       # pt_threshold between [0.5 - 1.0]
       pt_threshold: 0.7
@@ -93,6 +97,10 @@ selection:
       initial_temp: 50 
       min_temp: 10
       k: 2
+
+      # in case of deterministic tournaments
+      # m between [1 - INITIAL_POPULATION-1]
+      m: 5
     
       # in case of probabilistic tournaments
       # pt_threshold between [0.5 - 1.0]
@@ -105,6 +113,10 @@ selection:
       min_temp: 10
       k: 2
     
+      # in case of deterministic tournaments
+      # m between [1 - INITIAL_POPULATION-1]
+      m: 5
+
       # in case of probabilistic tournaments
       # pt_threshold between [0.5 - 1.0]
       pt_threshold: 0.7
@@ -116,6 +128,10 @@ selection:
       min_temp: 10
       k: 2
 
+      # in case of deterministic tournaments
+      # m between [1 - INITIAL_POPULATION-1]
+      m: 5
+
       # in case of probabilistic tournaments
       # pt_threshold between [0.5 - 1.0]
       pt_threshold: 0.7
@@ -126,7 +142,7 @@ implementation:
 
 stop:
   # all options: time, gens, acceptable, struct, content
-  opt: struct
+  opt: gens
   params:
     # in case of time, declared in seconds
     max_time: 10
@@ -148,7 +164,7 @@ stop:
 
 # path to tsv file containing all items info
 items_dataset: 
-  path: allitems_test
+  path: allitems
   weapons_filename: armas.tsv
   boots_filename: botas.tsv
   helmets_filename: cascos.tsv
@@ -156,14 +172,15 @@ items_dataset:
   breastplates_filename: pecheras.tsv
 
 # all options: warrior, archer, defender, infiltrate
-character_class: infiltrate
+character_class: warrior
 
 # natural number greater than zero
-initial_population: 100
+initial_population: 200
 
 # to run multiple iterations 
 multiple_times:
-  run: False  #requires boolean True or False
+  # run requires boolean True or False
+  run: False  
   iterations: 40
 ```
 
@@ -173,9 +190,11 @@ El parametro ```multiple_times``` indica si se desea correr esta configuración 
 * El minimo fitness 
 * La diversidad genetica
 
+Cabe aclarar que estos gráficos se muestran en orden, y para pasar al siguiente hay que cerrar el gráfico actual.
+
 En cada grafico se muestra tambien el promedio de cada una de estas para poder observar la tendencia que tienen.
 
-De estar ```multiple_times``` **desactivado** se mostrarán graficos a tiempo real de:
+De estar ```multiple_times``` **desactivado** se mostrarán graficos en tiempo real de:
 * Maximo, media y minimo fitness de la poblacion
 * Diversidad genetica para cada uno de los genes de la población
 * La vida, fuerza, resistencia, pericia y agilidad para el individuo con mayor fitness

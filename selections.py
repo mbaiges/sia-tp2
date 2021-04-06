@@ -144,21 +144,22 @@ class Boltzmann:
 
 class DeterministicTournaments:
 
+    def __init__(self, m):
+        self.m = m
+
     def select(self, individuals, gen_n, K):
         selected = []
         selected_n = 0
 
         while selected_n < K:
-            idx1 = random.randint(0, len(individuals) - 1)
-            idx2 = random.randint(0, len(individuals) - 1)
+            idxs = [random.randint(0, len(individuals) - 1) for a in range(0, self.m)]
 
-            ind1 = individuals[idx1]
-            ind2 = individuals[idx2]
+            chosen = None
 
-            if ind1.fitness >= ind2.fitness:
-                chosen = ind1
-            else:
-                chosen = ind2
+            for idx in idxs:
+                ind = individuals[idx]
+                if chosen is None or ind.fitness > chosen.fitness:
+                    chosen = ind
 
             selected.append(chosen)
             selected_n += 1

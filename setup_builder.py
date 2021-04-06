@@ -52,14 +52,14 @@ stops = {
 }
 
 
-def get_selection(name, params):
+def get_selection(name, params, initial_population):
     method = selections.get(name, None)
     if method is None:
         print(f'Error: Selection method 1 "{name}" does not exist')
         exit(1)
 
     # if needs params
-    if name == 'boltzmann' or name == 'prob_tournaments':
+    if name == 'boltzmann' or name == 'prob_tournaments' or name == 'det_tournaments':
 
         if params is None:
             print(f'Error: {name} params missing')
@@ -103,6 +103,21 @@ def get_selection(name, params):
                 exit(1)
 
             return method(initial_temp, min_temp, k)
+        elif name == 'det_tournaments':
+            m = params['m']
+            
+            if m is None:
+                print(f'Error: Missing m param at {name}')
+                exit(1)
+            elif not type(m) == int:
+                print('Error: m must be an integer')
+                exit(1)
+            m = int(m)
+            if m < 1 or m >= initial_population:
+                print(f'Error: m must be in range [1 - {initial_population-1}]')
+                exit(1)
+
+            return method(m)
         elif name == 'prob_tournaments':
             pt_threshold = params['pt_threshold']
             
@@ -129,6 +144,16 @@ def get_setup(config):
 
     if character_class_constructor is None:
         print(f'Error: Character class "{config.character_class}" does not exist')
+        exit(1)
+
+    # Initial population
+
+    initial_population = config.initial_population
+    if not type(initial_population) == int:
+        print('Error: initial_population must be an integer')
+        exit(1)
+    if initial_population <= 0:
+        print('Error: initial_population must be greater than 0')
         exit(1)
 
     # Parents selection and children replacement
@@ -168,20 +193,20 @@ def get_setup(config):
 
     ## Method 1
 
-    method1 = get_selection(config.method1, config.method1_params)
+    method1 = get_selection(config.method1, config.method1_params, initial_population)
     
         ## Method 2
 
-    method2 = get_selection(config.method2, config.method2_params)
+    method2 = get_selection(config.method2, config.method2_params, initial_population)
 
     ## Method 3
 
-    method3 = get_selection(config.method3, config.method3_params)
+    method3 = get_selection(config.method3, config.method3_params, initial_population)
 
 
     ## Method 4
 
-    method4 = get_selection(config.method4, config.method4_params)
+    method4 = get_selection(config.method4, config.method4_params, initial_population)
 
 
     # Genetic operators
@@ -301,16 +326,6 @@ def get_setup(config):
             print('Error: pf must be between 0 and 1')
             exit(1)
         mutation = mutation(pf)
-
-    # Initial population
-
-    initial_population = config.initial_population
-    if not type(initial_population) == int:
-        print('Error: initial_population must be an integer')
-        exit(1)
-    if initial_population <= 0:
-        print('Error: initial_population must be greater than 0')
-        exit(1)
 
     # Implementation-----------------------------------------------------------------------------
 
